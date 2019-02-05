@@ -110,7 +110,6 @@ Build sources image (branch):
   script: &build-sources-image-script
   - docker run --rm -u "$(id -u):$(id -g)" -v "$(pwd)/src:/app:rw"
     $APP_IMAGE:$TAG_NAME composer install --no-interaction --ansi --no-suggest --prefer-dist --no-dev
-  - docker run --rm -u "$(id -u):$(id -g)" -v "$(pwd)/src:/app:rw" --workdir "/app"
   - make PUBLISH_TAGS="$PUBLISH_TAGS" sources-push
 
 Build sources image (latest):
