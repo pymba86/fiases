@@ -11,6 +11,7 @@ stages:
 - prepare
 - test
 - build
+- deploy
 
 cache:
   key: "${CI_PROJECT_PATH_SLUG}-${CI_COMMIT_REF_SLUG}"
@@ -131,3 +132,27 @@ Build sources image (stable):
     TAG_NAME: $CI_COMMIT_REF_NAME # Here it looks like 'v1.2.0'
     PUBLISH_TAGS: "$CI_COMMIT_REF_NAME stable"
   script: *build-sources-image-script
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+Deploy services 82.202.221.170 (latest):
+  <<: *with-docker
+  stage: deploy
+  only: *latest-only
+  except: *build-image-except
+  variables:
+    DOCKER_HOST: tcp://82.202.221.170:2376
+    DOCKER_TLS_VERIFY: 1
+    DOCKER_CERT_PATH: "/certs"
+  script:
+    - mkdir -p $DOCKER_CERT_PATH
+    - echo "$TLSCACERT" > $DOCKER_CERT_PATH/ca.pem
+    - echo "$TLSCERT" > $DOCKER_CERT_PATH/cert.pem
+    - echo "$TLSKEY" > $DOCKER_CERT_PATH/key.pem
+    - docker stack deploy -c docker-swarm.yml latest --with-registry-auth
+    - rm -rf $DOCKER_CERT_PATH
+  environment:
+    name: master
+    url: http://82.202.221.170
+    tags:
+      - docker
