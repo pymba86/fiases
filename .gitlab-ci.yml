@@ -8,32 +8,32 @@ variables:
   NGINX_IMAGE: $CI_REGISTRY_IMAGE/nginx
 
 stages:
-- prepare
-- test
-- build
-- deploy
+  - prepare
+  - test
+  - build
+  - deploy
 
 cache:
   key: "${CI_PROJECT_PATH_SLUG}-${CI_COMMIT_REF_SLUG}"
   paths:
-  - "${CI_PROJECT_DIR}/.build/"
-  - src/vendor/
-  - src/node_modules/
+    - "${CI_PROJECT_DIR}/.build/"
+    - src/vendor/
+    - src/node_modules/
 
 before_script:
-- mkdir -p "${CI_PROJECT_DIR}/.build"
-- function composer_install() {
-  composer install --no-interaction --ansi --no-suggest --prefer-dist;
-  }
+  - mkdir -p "${CI_PROJECT_DIR}/.build"
+  - function composer_install() {
+    composer install --no-interaction --ansi --no-suggest --prefer-dist;
+    }
 
 # Job template for a working with docker
 .with-docker: &with-docker
   services:
-  - docker:dind
+    - docker:dind
   before_script:
-  - which make || ( apk add --no-cache make > /dev/null )
-  - mkdir -p "${CI_PROJECT_DIR}/.build"
-  - docker login -u gitlab-ci-token -p "$CI_JOB_TOKEN" registry.gitlab.com
+    - which make || ( apk add --no-cache make > /dev/null )
+    - mkdir -p "${CI_PROJECT_DIR}/.build"
+    - docker login -u gitlab-ci-token -p "$CI_JOB_TOKEN" registry.gitlab.com
   script: /bin/true
   cache: {} # Disable cache during work with docker
 
@@ -43,23 +43,23 @@ Build service images (branch):
   <<: *with-docker
   stage: prepare
   only: &branch-only
-  - branches
+    - branches
   except: &build-image-except
     variables:
-    - $CI_COMMIT_TITLE =~ /\[skip.?build\]/i
+      - $CI_COMMIT_TITLE =~ /\[skip.?build\]/i
   variables:
     PULL_TAG: "$CI_COMMIT_REF_SLUG" # Here it looks like 'master' or 'some-branch-name'
     PUBLISH_TAGS: "$CI_COMMIT_REF_SLUG"
   script: &build-app-image-script
-  - make PULL_TAG="$PULL_TAG" PUBLISH_TAGS="$PUBLISH_TAGS" app-push
-  - make PULL_TAG="$PULL_TAG" PUBLISH_TAGS="$PUBLISH_TAGS" nginx-push
+    - make PULL_TAG="$PULL_TAG" PUBLISH_TAGS="$PUBLISH_TAGS" app-push
+    - make PULL_TAG="$PULL_TAG" PUBLISH_TAGS="$PUBLISH_TAGS" nginx-push
 
 Build service images (latest):
   <<: *with-docker
   stage: prepare
   only: &latest-only
     refs:
-    - master
+      - master
   except: *build-image-except
   variables:
     PULL_TAG: latest
@@ -70,9 +70,9 @@ Build service images (stable):
   <<: *with-docker
   stage: prepare
   only: &stable-only
-  - /^v\d+\.\d+\.\d+$/
+    - /^v\d+\.\d+\.\d+$/
   except: &stable-except
-  - branches
+    - branches
   variables:
     PULL_TAG: "$CI_COMMIT_REF_NAME" # Here it looks like 'v1.2.0'
     PUBLISH_TAGS: "$CI_COMMIT_REF_NAME stable"
@@ -86,12 +86,12 @@ Execute phpunit (branch): &execute-phpunit
   only: *branch-only
   except: &tests-except
     variables:
-    - $CI_COMMIT_TITLE =~ /\[skip.?test\]/i
+      - $CI_COMMIT_TITLE =~ /\[skip.?test\]/i
   coverage: '/^\s*Lines:\s*\d+.\d+\%/'
   script:
-  - docker-php-ext-enable xdebug
-  - cd ./src
-  - composer_install
+    - docker-php-ext-enable xdebug
+    - cd ./src
+    - composer_install
 
 Execute phpunit (stable):
   <<: *execute-phpunit
@@ -109,9 +109,9 @@ Build sources image (branch):
     TAG_NAME: $CI_COMMIT_REF_SLUG # Here it looks like 'master' or 'some-branch-name'
     PUBLISH_TAGS: "$CI_COMMIT_REF_SLUG"
   script: &build-sources-image-script
-  - docker run --rm -u "$(id -u):$(id -g)" -v "$(pwd)/src:/app:rw"
-    $APP_IMAGE:$TAG_NAME composer install --no-interaction --ansi --no-suggest --prefer-dist --no-dev
-  - make PUBLISH_TAGS="$PUBLISH_TAGS" sources-push
+    - docker run --rm -u "$(id -u):$(id -g)" -v "$(pwd)/src:/app:rw"
+      $APP_IMAGE:$TAG_NAME composer install --no-interaction --ansi --no-suggest --prefer-dist --no-dev
+    - make PUBLISH_TAGS="$PUBLISH_TAGS" sources-push
 
 Build sources image (latest):
   <<: *with-docker
@@ -154,5 +154,3 @@ Deploy services 82.202.221.170 (latest):
   environment:
     name: master
     url: http://82.202.221.170
-    tags:
-      - docker
