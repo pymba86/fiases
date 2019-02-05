@@ -5,7 +5,7 @@
 SHELL = /bin/sh
 
 REGISTRY_HOST = registry.gitlab.com
-REGISTRY_PATH = PyMba86/fias-es/
+REGISTRY_PATH = pymba86/fias-es/
 IMAGES_PREFIX := $(shell basename $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST)))))
 
 PUBLISH_TAGS = latest
