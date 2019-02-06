@@ -142,6 +142,7 @@ Deploy services 82.202.221.170 (latest):
   except: *build-image-except
   variables:
     DOCKER_HOST: tcp://82.202.221.170:2376
+    DOCKER_TLS_VERIFY: 1
     DOCKER_CERT_PATH: "~/.docker"
   script:
     - mkdir -p $DOCKER_CERT_PATH
@@ -150,7 +151,6 @@ Deploy services 82.202.221.170 (latest):
     - echo "$TLSCERT" > $DOCKER_CERT_PATH/cert.pem
     - echo "$TLSKEY" > $DOCKER_CERT_PATH/key.pem
     - docker stack deploy -c docker-swarm.yml env_name --with-registry-auth
-    - rm -rf $DOCKER_CERT_PATH
   environment:
     name: master
     url: http://82.202.221.170
