@@ -146,7 +146,6 @@ Deploy services 82.202.221.170 (latest):
   script:
     - mkdir -p $DOCKER_CERT_PATH
     - echo "$TLSCACERT" > $DOCKER_CERT_PATH/ca.pem
-    - cat $DOCKER_CERT_PATH/ca.pem
     - echo "$TLSCERT" > $DOCKER_CERT_PATH/cert.pem
     - echo "$TLSKEY" > $DOCKER_CERT_PATH/key.pem
     - docker login -u gitlab-ci-token -p "$CI_JOB_TOKEN" registry.gitlab.com
