@@ -7,6 +7,10 @@ volumes:
 services:
   &sources sources:
     image: registry.gitlab.com/pymba86/fias-es/sources:latest
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
     volumes:
       - vnode:/src
 
