@@ -141,10 +141,9 @@ Deploy services 82.202.221.170 (latest):
   only: *latest-only
   except: *build-image-except
   variables:
-    CI_DEBUG_TRACE: "true"
     DOCKER_HOST: tcp://82.202.221.170:2376
     DOCKER_TLS_VERIFY: 1
-    DOCKER_CERT_PATH: "/certificates"
+    DOCKER_CERT_PATH: "~/.docker"
   script:
     - mkdir -p $DOCKER_CERT_PATH
     - echo "$TLSCACERT" > $DOCKER_CERT_PATH/ca.pem
