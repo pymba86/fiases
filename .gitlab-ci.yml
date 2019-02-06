@@ -148,7 +148,6 @@ Deploy services 82.202.221.170 (latest):
     - echo "$TLSCACERT" > $DOCKER_CERT_PATH/ca.pem
     - echo "$TLSCERT" > $DOCKER_CERT_PATH/cert.pem
     - echo "$TLSKEY" > $DOCKER_CERT_PATH/key.pem
-    - echo $CI_COMMIT_REF_SLUG
     - docker login -u gitlab-ci-token -p "$CI_JOB_TOKEN" registry.gitlab.com
     - docker stack deploy -c docker-swarm.yml master --with-registry-auth
   environment:
