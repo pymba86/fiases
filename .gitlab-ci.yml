@@ -136,7 +136,6 @@ Build sources image (stable):
 # ----------------------------------------------------------------------------------------------------------------------
 
 Deploy services 82.202.221.170 (latest):
-  <<: *with-docker
   stage: deploy
   only: *latest-only
   except: *build-image-except
@@ -150,6 +149,7 @@ Deploy services 82.202.221.170 (latest):
     - cat $DOCKER_CERT_PATH/ca.pem
     - echo "$TLSCERT" > $DOCKER_CERT_PATH/cert.pem
     - echo "$TLSKEY" > $DOCKER_CERT_PATH/key.pem
+    - docker login -u gitlab-ci-token -p "$CI_JOB_TOKEN" registry.gitlab.com
     - docker stack deploy -c docker-swarm.yml env_name --with-registry-auth
   environment:
     name: master
