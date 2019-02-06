@@ -1,11 +1,5 @@
 version: "3.2"
 
-networks:
-  backend-network:
-    driver: bridge
-  frontend-network:
-    driver: bridge
-
 volumes:
   home-dir:
 
@@ -21,8 +15,6 @@ services:
       APP_DEBUG: 'true'
       HOME: /home/user
     command: keep-alive.sh
-    networks:
-      - backend-network
     deploy:
       replicas: 1
       restart_policy:
@@ -37,14 +29,10 @@ services:
   &php-fpm-service php-fpm:
     <<: *app-service-template
     user: 'root:root'
-    restart: always
     hostname: *php-fpm-service
     ports: [*php-fpm-port]
     entrypoint: /fpm-entrypoint.sh
     command: php-fpm --nodaemonize -d "opcache.enable=0" -d "display_startup_errors=On" -d "display_errors=On" -d "error_reporting=E_ALL"
-    networks:
-      - backend-network
-      - frontend-network
 
   nginx:
     image: registry.gitlab.com/pymba86/fias-es/nginx:${CI_COMMIT_SHA}
@@ -63,4 +51,3 @@ services:
     depends_on:
       - *php-fpm-service
     networks:
-      - frontend-network
