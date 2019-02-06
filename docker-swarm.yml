@@ -4,6 +4,11 @@ volumes:
   home-dir:
 
 services:
+  &sources sources:
+    image: registry.gitlab.com/pymba86/fias-es/sources:${CI_COMMIT_SHA}
+    volumes:
+      - ./src:/app:rw
+
   &app-service app: &app-service-template
     image: registry.gitlab.com/pymba86/fias-es/app:${CI_COMMIT_SHA}
     hostname: *app-service
@@ -25,6 +30,8 @@ services:
       - /etc/group:/etc/group:ro
       - ./src:/app:rw
       - home-dir:/home/user
+    depends_on:
+      - *sources
 
   &php-fpm-service php-fpm:
     <<: *app-service-template
@@ -34,7 +41,7 @@ services:
     entrypoint: /fpm-entrypoint.sh
     command: php-fpm --nodaemonize -d "opcache.enable=0" -d "display_startup_errors=On" -d "display_errors=On" -d "error_reporting=E_ALL"
 
-  nginx:
+  &ngnix nginx:
     image: registry.gitlab.com/pymba86/fias-es/nginx:${CI_COMMIT_SHA}
     deploy:
       mode: global
@@ -50,3 +57,10 @@ services:
     ports: ['80:80']
     depends_on:
       - *php-fpm-service
+
+networks:
+  projectnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 0.0.0.0/24

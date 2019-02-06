@@ -149,7 +149,7 @@ Deploy services 82.202.221.170 (latest):
     - cat $DOCKER_CERT_PATH/ca.pem
     - echo "$TLSCERT" > $DOCKER_CERT_PATH/cert.pem
     - echo "$TLSKEY" > $DOCKER_CERT_PATH/key.pem
-    - docker login -u PyMba86 -p Ranger1996 registry.gitlab.com
+    - docker login -u gitlab-ci-token -p "$CI_JOB_TOKEN" registry.gitlab.com
     - docker stack deploy -c docker-swarm.yml master --with-registry-auth
   environment:
     name: master
