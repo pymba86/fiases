@@ -2,12 +2,13 @@ version: "3.2"
 
 volumes:
   home-dir:
+  vnode:
 
 services:
   &sources sources:
     image: registry.gitlab.com/pymba86/fias-es/sources:${CI_COMMIT_SHA}
     volumes:
-      - ./src:/app:rw
+      - vnode:/src
 
   &app-service app: &app-service-template
     image: registry.gitlab.com/pymba86/fias-es/app:${CI_COMMIT_SHA}
@@ -28,7 +29,7 @@ services:
     volumes:
       - /etc/passwd:/etc/passwd:ro
       - /etc/group:/etc/group:ro
-      - ./src:/app:rw
+      - vnode:/app:rw
       - home-dir:/home/user
     depends_on:
       - *sources
@@ -53,14 +54,7 @@ services:
       FPM_PORT: *php-fpm-port
       ROOT_DIR: '/app/public' # Путь к приложению должен равняться пути к контейнеру php-fpm
     volumes:
-      - ./src:/app:ro
+      - vnode:/app:ro
     ports: ['80:80']
     depends_on:
       - *php-fpm-service
-
-networks:
-  projectnet:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 0.0.0.0/24

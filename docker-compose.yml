@@ -8,14 +8,8 @@ networks:
 
 volumes:
   home-dir:
-  sources:
 
 services:
-
-  &sources sources:
-    image: registry.gitlab.com/pymba86/fias-es/sources:stable
-    volumes:
-      - ./src:/app:rw
 
   &app-service app: &app-service-template
     build: ./docker/app
@@ -23,8 +17,8 @@ services:
     volumes:
       - /etc/passwd:/etc/passwd:ro
       - /etc/group:/etc/group:ro
+      - ./src:/app:rw
       - home-dir:/home/user
-      - sources:/app:rw
     hostname: *app-service
     environment:
       FPM_PORT: &php-fpm-port 9000
