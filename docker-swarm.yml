@@ -6,12 +6,12 @@ volumes:
 
 services:
   &sources sources:
-    image: registry.gitlab.com/pymba86/fias-es/sources:${CI_COMMIT_SHA}
+    image: registry.gitlab.com/pymba86/fias-es/sources:${CI_COMMIT_REF_SLUG}
     volumes:
       - vnode:/src
 
   &app-service app: &app-service-template
-    image: registry.gitlab.com/pymba86/fias-es/app:${CI_COMMIT_SHA}
+    image: registry.gitlab.com/pymba86/fias-es/app:${CI_COMMIT_REF_SLUG}
     hostname: *app-service
     environment:
       FPM_PORT: &php-fpm-port 9000
@@ -43,7 +43,7 @@ services:
     command: php-fpm --nodaemonize -d "opcache.enable=0" -d "display_startup_errors=On" -d "display_errors=On" -d "error_reporting=E_ALL"
 
   &ngnix nginx:
-    image: registry.gitlab.com/pymba86/fias-es/nginx:${CI_COMMIT_SHA}
+    image: registry.gitlab.com/pymba86/fias-es/nginx:${CI_COMMIT_REF_SLUG}
     deploy:
       mode: global
       restart_policy:
