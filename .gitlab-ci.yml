@@ -148,14 +148,8 @@ Deploy services 82.202.221.170 (latest):
   variables:
     STAGE_DOCKER_HOST: tcp://82.202.221.170:2375
     COMPOSE_FILE: docker-compose.prod.yml
-    DOCKER_CERT_PATH: "~/certs"
   script:
     - docker login -u gitlab-ci-token -p "$CI_JOB_TOKEN" registry.gitlab.com
-    - mkdir -p $DOCKER_CERT_PATH
-    - echo "$TLSCACERT" > $DOCKER_CERT_PATH/ca.pem
-    - echo "$TLSCERT" > $DOCKER_CERT_PATH/cert.pem
-    - echo "$TLSKEY" > $DOCKER_CERT_PATH/key.pem
-    - ls
     - docker-compose --file docker-compose.prod.yml --verbose --host $STAGE_DOCKER_HOST  pull
     - docker-compose --file docker-compose.prod.yml --verbose --host $STAGE_DOCKER_HOST  down -v
     - docker-compose --file docker-compose.prod.yml --verbose --host $STAGE_DOCKER_HOST  up -d --force-recreate --no-deps
