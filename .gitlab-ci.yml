@@ -156,6 +156,6 @@ Deploy services 82.202.221.170 (latest):
     - echo "$TLSCERT" > $DOCKER_CERT_PATH/cert.pem
     - echo "$TLSKEY" > $DOCKER_CERT_PATH/key.pem
     - ls
-   environment:
+  environment:
     name: master
     url: http://82.202.221.170
