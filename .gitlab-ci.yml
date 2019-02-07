@@ -150,7 +150,6 @@ Deploy services 82.202.221.170 (latest):
     COMPOSE_FILE: docker-compose.prod.yml
     DOCKER_CERT_PATH: "~/certs"
   script:
-    - docker login -u gitlab-ci-token -p "$CI_JOB_TOKEN" registry.gitlab.com
     - mkdir -p $DOCKER_CERT_PATH
     - echo "$TLSCACERT" > $DOCKER_CERT_PATH/ca.pem
     - echo "$TLSCERT" > $DOCKER_CERT_PATH/cert.pem
