@@ -146,18 +146,18 @@ Deploy services 82.202.221.170 (latest):
   only: *latest-only
   except: *build-image-except
   variables:
-    DOCKER_HOST: tcp://82.202.221.170:2376
-    DOCKER_TLS_VERIFY: 1
+    STAGE_DOCKER_HOST: tcp://82.202.221.170:2376
+    COMPOSE_FILE: docker-compose.prod.yml
     DOCKER_CERT_PATH: "~/certs"
   script:
+    - docker login -u gitlab-ci-token -p "$CI_JOB_TOKEN" registry.gitlab.com
     - mkdir -p $DOCKER_CERT_PATH
     - echo "$TLSCACERT" > $DOCKER_CERT_PATH/ca.pem
     - echo "$TLSCERT" > $DOCKER_CERT_PATH/cert.pem
     - echo "$TLSKEY" > $DOCKER_CERT_PATH/key.pem
-    - docker login -u gitlab-ci-token -p "$CI_JOB_TOKEN" registry.gitlab.com
-    - docker-compose -f docker-compose.prod.yml pull
-    - docker-compose -f docker-compose.prod.yml down -v
-    - docker-compose -f docker-compose.prod.yml up -d --force-recreate --no-deps
+    - docker-compose --file docker-compose.prod.yml --verbose --host $STAGE_DOCKER_HOST --tlsverify --tlscacert $DOCKER_CERT_PATH/ca.pem --tlscert $DOCKER_CERT_PATH/cert.pem --tlskey $DOCKER_CERT_PATH/key.pem pull
+    - docker-compose --file docker-compose.prod.yml --verbose --host $STAGE_DOCKER_HOST --tlsverify --tlscacert $DOCKER_CERT_PATH/ca.pem --tlscert $DOCKER_CERT_PATH/cert.pem --tlskey $DOCKER_CERT_PATH/key.pem down -v
+    - docker-compose --file docker-compose.prod.yml --verbose --host $STAGE_DOCKER_HOST --tlsverify --tlscacert $DOCKER_CERT_PATH/ca.pem --tlscert $DOCKER_CERT_PATH/cert.pem --tlskey $DOCKER_CERT_PATH/key.pem up -d --force-recreate --no-deps
   environment:
     name: master
     url: http://82.202.221.170
