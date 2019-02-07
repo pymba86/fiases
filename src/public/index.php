@@ -1,3 +1,3 @@
 <?php
 
-echo 'version 5';
+echo 'version OK';
