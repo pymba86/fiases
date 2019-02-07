@@ -149,6 +149,8 @@ Deploy services 82.202.221.170 (latest):
   except: *build-image-except
   variables:
     DOCKER_HOST: tcp://82.202.221.170:2376
+    COMPOSE_FILE: docker-compose.prod.yml
+    COMPOSE_PROJECT_NAME: master
     DOCKER_TLS_VERIFY: 1
     DOCKER_CERT_PATH: "~/certs"
   script:
