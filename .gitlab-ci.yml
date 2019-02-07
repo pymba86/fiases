@@ -143,7 +143,7 @@ Build sources image (stable):
 
 Deploy services 82.202.221.170 (latest):
   stage: deploy
-  only: *latest-only
+  only: *stable-only
   except: *build-image-except
   variables:
     STAGE_DOCKER_HOST: tcp://82.202.221.170:2375
