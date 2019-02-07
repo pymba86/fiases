@@ -6,12 +6,12 @@ volumes:
 
 services:
   &sources sources:
-    image: registry.gitlab.com/pymba86/fias-es/sources:${$CI_COMMIT_REF_NAME}
+    image: registry.gitlab.com/pymba86/fias-es/sources:stable
     volumes:
       - vnode:/src
 
   &php-fpm-service php-fpm:
-    image: registry.gitlab.com/pymba86/fias-es/app:${$CI_COMMIT_REF_NAME}
+    image: registry.gitlab.com/pymba86/fias-es/app:stable
     user: 'root:root'
     hostname: *php-fpm-service
     environment:
@@ -33,7 +33,7 @@ services:
       - *sources
 
   &ngnix nginx:
-    image: registry.gitlab.com/pymba86/fias-es/nginx:${$CI_COMMIT_REF_NAME}
+    image: registry.gitlab.com/pymba86/fias-es/nginx:stable
     working_dir: /usr/share/nginx/html
     environment:
       FPM_HOST: *php-fpm-service
