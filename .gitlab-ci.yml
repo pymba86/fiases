@@ -2,6 +2,10 @@
 # GitLab environments: <https://docs.gitlab.com/ee/ci/variables/>
 image: docker:stable
 
+services:
+  - docker:dind
+
+
 variables:
   APP_IMAGE: $CI_REGISTRY_IMAGE/app
   SOURCES_IMAGE: $CI_REGISTRY_IMAGE/sources
@@ -21,6 +25,10 @@ cache:
     - src/node_modules/
 
 before_script:
+  - apk add --no-cache py-pip
+  - pip install docker-compose
+  - docker version
+  - docker-compose version
   - mkdir -p "${CI_PROJECT_DIR}/.build"
   - function composer_install() {
     composer install --no-interaction --ansi --no-suggest --prefer-dist;
@@ -149,7 +157,9 @@ Deploy services 82.202.221.170 (latest):
     - echo "$TLSCERT" > $DOCKER_CERT_PATH/cert.pem
     - echo "$TLSKEY" > $DOCKER_CERT_PATH/key.pem
     - docker login -u gitlab-ci-token -p "$CI_JOB_TOKEN" registry.gitlab.com
-    - docker stack deploy -c docker-swarm.yml master --with-registry-auth
+    - docker-compose pull
+    - docker-compose down -v
+    - docker-compose up -d --force-recreate --no-deps
   environment:
     name: master
     url: http://82.202.221.170
