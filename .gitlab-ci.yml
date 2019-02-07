@@ -155,6 +155,7 @@ Deploy services 82.202.221.170 (latest):
     - echo "$TLSCACERT" > $DOCKER_CERT_PATH/ca.pem
     - echo "$TLSCERT" > $DOCKER_CERT_PATH/cert.pem
     - echo "$TLSKEY" > $DOCKER_CERT_PATH/key.pem
+    - ls
     - docker-compose --file docker-compose.prod.yml --verbose --host $STAGE_DOCKER_HOST --tlsverify --tlscacert $DOCKER_CERT_PATH/ca.pem --tlscert $DOCKER_CERT_PATH/cert.pem --tlskey $DOCKER_CERT_PATH/key.pem pull
     - docker-compose --file docker-compose.prod.yml --verbose --host $STAGE_DOCKER_HOST --tlsverify --tlscacert $DOCKER_CERT_PATH/ca.pem --tlscert $DOCKER_CERT_PATH/cert.pem --tlskey $DOCKER_CERT_PATH/key.pem down -v
     - docker-compose --file docker-compose.prod.yml --verbose --host $STAGE_DOCKER_HOST --tlsverify --tlscacert $DOCKER_CERT_PATH/ca.pem --tlscert $DOCKER_CERT_PATH/cert.pem --tlskey $DOCKER_CERT_PATH/key.pem up -d --force-recreate --no-deps
