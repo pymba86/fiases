@@ -25,7 +25,8 @@ cache:
     - src/node_modules/
 
 before_script:
-  - apk add --update python py-pip python-dev && pip install docker-compose
+  - apk add --update py-pip && pip install docker-compose
+  - docker-compose version
   - mkdir -p "${CI_PROJECT_DIR}/.build"
   - function composer_install() {
     composer install --no-interaction --ansi --no-suggest --prefer-dist;
@@ -146,8 +147,6 @@ Deploy services 82.202.221.170 (latest):
   except: *build-image-except
   variables:
     DOCKER_HOST: tcp://82.202.221.170:2376
-    COMPOSE_FILE: docker-compose.prod.yml
-    COMPOSE_PROJECT_NAME: master
     DOCKER_TLS_VERIFY: 1
     DOCKER_CERT_PATH: "~/certs"
   script:
@@ -156,9 +155,9 @@ Deploy services 82.202.221.170 (latest):
     - echo "$TLSCERT" > $DOCKER_CERT_PATH/cert.pem
     - echo "$TLSKEY" > $DOCKER_CERT_PATH/key.pem
     - docker login -u gitlab-ci-token -p "$CI_JOB_TOKEN" registry.gitlab.com
-    - docker-compose pull
-    - docker-compose down -v
-    - docker-compose up -d --force-recreate --no-deps
+    - docker-compose -f docker-compose.prod.yml pull
+    - docker-compose -f docker-compose.prod.yml down -v
+    - docker-compose -f docker-compose.prod.yml up -d --force-recreate --no-deps
   environment:
     name: master
     url: http://82.202.221.170
