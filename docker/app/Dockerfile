@@ -41,25 +41,25 @@ RUN set -xe \
     && docker-php-ext-configure pcntl --enable-pcntl \
     && docker-php-ext-configure mbstring --enable-mbstring \
     && docker-php-ext-configure soap --enable-soap \
+    && docker-php-ext-configure mysql --enable-mysql \
+    && docker-php-ext-configure curl --enable-curl \
+    && docker-php-ext-configure xml --enable-xml \
+    && docker-php-ext-configure json --enable-json \
+    && docker-php-ext-configure zip --enable-zip \
+    && docker-php-ext-configure fileinfo --enable-fileinfo \
     && docker-php-ext-configure opcache --enable-opcache \
     && docker-php-ext-install -j$(nproc) \
-        bcmath \
+        mysql \
+        curl \
+        fileinfo \
+        json \
+        xml \
+        zip \
         intl \
         pcntl \
         mbstring \
         soap \
-        iconv \
-        bz2 \
-        calendar \
-        exif \
         gettext \
-        shmop \
-        sockets \
-        sysvmsg \
-        sysvsem \
-        sysvshm \
-        wddx \
-        xsl \
         opcache \
     && echo -e "opcache.memory_consumption=128\n\
 opcache.interned_strings_buffer=8\n\

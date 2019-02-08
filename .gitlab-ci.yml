@@ -169,6 +169,9 @@ Deploy services 82.202.221.170 (stable):
     - docker-compose --host $STAGE_DOCKER_HOST  pull
     - docker-compose --host $STAGE_DOCKER_HOST  down
     - docker -H $STAGE_DOCKER_HOST volume ls -q --filter "name=vnode" | xargs -r docker -H $STAGE_DOCKER_HOST volume rm -f
+    - docker image prune -f
+    - docker container prune -f
+    - docker network prune -f
     - docker-compose --host $STAGE_DOCKER_HOST  up -d --force-recreate --no-deps
   environment:
     name: master
