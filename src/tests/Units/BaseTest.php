@@ -11,6 +11,6 @@ class BaseTest extends UnitTestCase
 {
     public function testBaseCase()
     {
-        $this->assertTrue(extension_loaded('phalcon1'));
+        $this->assertTrue(extension_loaded('phalcon'));
     }
 }
