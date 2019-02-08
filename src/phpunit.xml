@@ -1,8 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<phpunit bootstrap="vendor/autoload.php" colors="true">
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="true">
     <testsuites>
         <testsuite name="Main">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true"
+                   addUncoveredFilesFromWhitelist="false">
+            <directory suffix=".php">./app</directory>
+            <exclude>
+                <directory>./vendor</directory>
+                <directory>./tests</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+    <logging>
+        <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
+        <log type="coverage-html" target="./storage/coverage/html"/>
+        <log type="coverage-xml" target="./storage/coverage/xml"/>
+        <log type="coverage-clover" target="./storage/coverage/clover.xml"/>
+        <log type="testdox-text" target="./storage/logs/testdox.log"/>
+    </logging>
+    <php>
+        <env name="APP_ENV" value="local"/>
+        <env name="APP_DEBUG" value="true"/>
+        <env name="BCRYPT_ROUNDS" value="4"/>
+        <env name="CACHE_DRIVER" value="array"/>
+        <env name="SESSION_DRIVER" value="array"/>
+        <env name="QUEUE_DRIVER" value="sync"/>
+        <env name="QUEUE_DRIVER" value="sync"/>
+    </php>
+
 </phpunit>
