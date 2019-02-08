@@ -153,8 +153,7 @@ class Console extends PhConsole
      * @param array $argv
      * @return array
      */
-    protected
-    function getTaskParameters(array $argv)
+    protected function getTaskParameters(array $argv)
     {
         $taskAction = [];
         array_shift($argv);
@@ -168,7 +167,7 @@ class Console extends PhConsole
             unset($argv[$i]);
         }
 
-        // $taskAction += ['main', 'main'];
+        $taskAction += [null, null];
 
         return [
             'task' => $taskAction[0],
@@ -182,8 +181,7 @@ class Console extends PhConsole
      * Получить все запланированные задачи
      * @return array
      */
-    public
-    function scheduled(): array
+    public function scheduled(): array
     {
         return $this->scheduled;
     }
@@ -196,8 +194,7 @@ class Console extends PhConsole
      * @param bool $allowUnknown Разрешить неизвестные варианты
      * @return Command Команда cli, для которой вы можете определить аргументы / параметры свободно.
      */
-    public
-    function command(string $command, string $description = '', bool $allowUnknown = false): Command
+    public function command(string $command, string $description = '', bool $allowUnknown = false): Command
     {
         $this->lastCommand = $command;
 
@@ -219,8 +216,7 @@ class Console extends PhConsole
      *                        Если дано, имя должно соответствовать имени, которое вы передали `addTask ($name)`
      * @return Console
      */
-    public
-    function schedule(string $cronExpr, string $command = ''): self
+    public function schedule(string $cronExpr, string $command = ''): self
     {
         $command = $command ?: $this->lastCommand;
 
@@ -233,8 +229,7 @@ class Console extends PhConsole
      * Начальные задачи.
      * @return Console
      */
-    public
-    function initTasks(): self
+    public function initTasks(): self
     {
         foreach ($this->getTaskClasses() as $name => $class) {
             $this->namespaces[$name] = \preg_replace('#Task$#', '', $class);
@@ -252,8 +247,7 @@ class Console extends PhConsole
         return array_merge($this->factoryTasks, $this->tasks);
     }
 
-    public
-    function middleware(string $class, string $event): self
+    public function middleware(string $class, string $event): self
     {
         $this->middlewares[] = [$class, $event];
         return $this;
@@ -266,8 +260,7 @@ class Console extends PhConsole
      *
      * @return array|self
      */
-    public
-    function middlewares(array $middlewares = [])
+    public function middlewares(array $middlewares = [])
     {
         if (func_num_args() > 0) {
             $this->middlewares = array_unique(array_merge($this->middlewares, $middlewares));
@@ -282,8 +275,7 @@ class Console extends PhConsole
      * Запускаеться список обработчиков перед запуском задачи
      * @return bool
      */
-    public
-    function beforeExecuteRoute(): bool
+    public function beforeExecuteRoute(): bool
     {
         return $this->relay('before');
     }
@@ -292,8 +284,7 @@ class Console extends PhConsole
      * Запускаеться список обработчиков после запуска задачи
      * @return bool
      */
-    public
-    function afterExecuteRoute(): bool
+    public function afterExecuteRoute(): bool
     {
         return $this->relay('after');
     }
@@ -303,8 +294,7 @@ class Console extends PhConsole
      * @param string $event
      * @return bool
      */
-    protected
-    function relay(string $event): bool
+    protected function relay(string $event): bool
     {
         foreach ($this->middlewares as $middleware => $eventMiddleware) {
             if ($eventMiddleware == $event) {

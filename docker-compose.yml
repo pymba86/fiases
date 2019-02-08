@@ -43,14 +43,14 @@ services:
       - backend-network
       - frontend-network
 
-  nginx:
+  &ngnix nginx:
     build: ./docker/nginx
     restart: always
     working_dir: /usr/share/nginx/html
     environment:
       FPM_HOST: *php-fpm-service
       FPM_PORT: *php-fpm-port
-      ROOT_DIR: '/app/public' # Путь к приложению должен равняться пути к контейнеру php-fpm
+      ROOT_DIR: '/app/api/public' # Путь к приложению должен равняться пути к контейнеру php-fpm
     volumes:
       - ./src:/app:ro
     ports: ['80:80']
@@ -58,3 +58,22 @@ services:
       - *php-fpm-service
     networks:
       - frontend-network
+
+  &elasticsearch elasticsearch:
+      image: elasticsearch:6.5.4
+      restart: always
+      ports:
+        - 9200:9200
+        - 9300:9300
+      volumes:
+        - ./data/es:/usr/share/elasticsearch/data
+        - ./docker/config/es/limits.conf:/etc/security/limits.conf
+        - ./docker/config/es/elasticsearch.env:/etc/default/elasticsearch
+        - ./docker/config/es/elasticsearch.yml:/etc/elasticsearch/elasticsearch.yml
+      environment:
+        - cluster.name=es-docker
+        - node.name=node1
+        - bootstrap.memory_lock=false
+      env_file:
+        - variables.env
+        - ./docker/config/es/elasticsearch.env

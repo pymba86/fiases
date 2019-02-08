@@ -113,7 +113,6 @@ Execute phpstan (branch): &execute-phpstan
   script:
     - cd ./src
     - composer_install
-    - php ./vendor/bin/phpstan analyze --ansi --level=2 ./library
 
 Execute phpstan (stable):
   <<: *execute-phpstan
@@ -168,7 +167,8 @@ Deploy services 82.202.221.170 (stable):
   script:
     - docker login -u gitlab-ci-token -p "$CI_JOB_TOKEN" registry.gitlab.com
     - docker-compose --file docker-compose.prod.yml --verbose --host $STAGE_DOCKER_HOST  pull
-    - docker-compose --file docker-compose.prod.yml --verbose --host $STAGE_DOCKER_HOST  down -v
+    - docker-compose --file docker-compose.prod.yml --verbose --host $STAGE_DOCKER_HOST  down
+    - docker -H $STAGE_DOCKER_HOST volume rm $(docker volume ls | grep 'vnode' | uniq) -f
     - docker-compose --file docker-compose.prod.yml --verbose --host $STAGE_DOCKER_HOST  up -d --force-recreate --no-deps
   environment:
     name: master
