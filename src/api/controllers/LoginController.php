@@ -25,7 +25,7 @@ class LoginController extends Controller
     {
         $this
             ->response
-            ->setPayloadSuccess(['token' => 1]);
+            ->setPayloadSuccess(['token' => 'v0.10.0']);
 
     }
 }

@@ -168,11 +168,7 @@ Deploy services 82.202.221.170 (stable):
     - docker login -u gitlab-ci-token -p "$CI_JOB_TOKEN" registry.gitlab.com
     - docker-compose --file docker-compose.prod.yml --verbose --host $STAGE_DOCKER_HOST  pull
     - docker-compose --file docker-compose.prod.yml --verbose --host $STAGE_DOCKER_HOST  down
-    - if (( $(docker -H $STAGE_DOCKER_HOST volume ls | grep 'vnode') )) ; then
-    - docker -H $STAGE_DOCKER_HOST volume rm $(docker -H $STAGE_DOCKER_HOST volume ls | grep 'vnode') -f;
-    - else
-    - echo 'no find volume';
-    - fi
+    - docker -H $STAGE_DOCKER_HOST volume ls -q --filter "name=vnode" | xargs -r docker -H $STAGE_DOCKER_HOST volume rm -f
     - docker-compose --file docker-compose.prod.yml --verbose --host $STAGE_DOCKER_HOST  up -d --force-recreate --no-deps
   environment:
     name: master
