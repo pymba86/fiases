@@ -98,6 +98,7 @@ Execute phpunit (branch): &execute-phpunit
     - docker-php-ext-enable xdebug
     - cd ./src
     - composer_install
+    - php ./vendor/bin/phpunit --colors=never --coverage-text
 
 Execute phpunit (stable):
   <<: *execute-phpunit
