@@ -141,7 +141,7 @@ Build sources image (stable):
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-Deploy services 82.202.221.170 (latest):
+Deploy services 82.202.221.170 (stable):
   stage: deploy
   only: *stable-only
   except: *build-image-except

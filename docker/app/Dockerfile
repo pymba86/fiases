@@ -1,4 +1,4 @@
-FROM php:7.2.10-fpm-alpine
+FROM mileschou/phalcon:7.2-fpm-alpine
 LABEL Description="fias-es-app"
 
 ENV PS1='\[\033[1;32m\]🐳  \[\033[1;36m\][\u@\h] \[\033[1;34m\]\w\[\033[0;35m\] \[\033[1;36m\]# \[\033[0m\]'
@@ -22,12 +22,12 @@ ENV PHPIZE_DEPS \
     libxslt-dev
 
 RUN apk add --no-cache --virtual .persistent-deps \
+    bzip2-dev \
     # for intl extension
     icu-dev \
     # for soap
     libxml2-dev \
     # for bz2 extension
-    bzip2-dev \
     # for intl extension
     libintl gettext-dev libxslt \
     # etc
@@ -70,6 +70,7 @@ opcache.enable_cli=1\n\
 opcache.enable=1\n" > /usr/local/etc/php/conf.d/opcache.ini \
     # For phpunit coverage
     && pecl install xdebug-${PHP_XDEBUG_VERSION} \
+    && pecl install rar \
     && apk del .build-deps \
     && rm -rf /tmp/* \
     && rm -rf /app \

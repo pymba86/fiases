@@ -1,3 +1,37 @@
 {
-
+  "name": "fias-web",
+  "description": "fias-web",
+  "keywords": [
+    "fias"
+  ],
+  "license": "proprietary",
+  "type": "project",
+  "require-dev": {
+    "phalcon/ide-stubs": "*",
+    "phpstan/phpstan": "^0.10.3",
+    "phpunit/phpunit": "^7.0"
+  },
+  "require": {
+    "php": ">=7.2",
+    "monolog/monolog": "^1.24",
+    "elasticsearch/elasticsearch": "^6.1",
+    "adhocore/cli": "^0.3.2",
+    "phalcon/cli-options-parser": "^1.1"
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "@php ./vendor/bin/phpunit --no-coverage",
+    "test-cover": "@php ./vendor/bin/phpunit --coverage-text",
+    "phpstan": "@php ./vendor/bin/phpstan analyze --ansi --level=2 ./app"
+  },
+  "config": {
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "optimize-autoloader": true
+  },
+  "prefer-stable": true
 }
