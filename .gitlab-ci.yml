@@ -113,7 +113,7 @@ Execute phpstan (branch): &execute-phpstan
   script:
     - cd ./src
     - composer_install
-    - php ./vendor/bin/phpstan analyze --ansi --level=2 ./app
+    - php ./vendor/bin/phpstan analyze --ansi --level=2 ./library
 
 Execute phpstan (stable):
   <<: *execute-phpstan
