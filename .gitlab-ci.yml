@@ -166,10 +166,10 @@ Deploy services 82.202.221.170 (stable):
     COMPOSE_FILE: docker-compose.prod.yml
   script:
     - docker login -u gitlab-ci-token -p "$CI_JOB_TOKEN" registry.gitlab.com
-    - docker-compose --file docker-compose.prod.yml --verbose --host $STAGE_DOCKER_HOST  pull
-    - docker-compose --file docker-compose.prod.yml --verbose --host $STAGE_DOCKER_HOST  down
+    - docker-compose --host $STAGE_DOCKER_HOST  pull
+    - docker-compose --host $STAGE_DOCKER_HOST  down
     - docker -H $STAGE_DOCKER_HOST volume ls -q --filter "name=vnode" | xargs -r docker -H $STAGE_DOCKER_HOST volume rm -f
-    - docker-compose --file docker-compose.prod.yml --verbose --host $STAGE_DOCKER_HOST  up -d --force-recreate --no-deps
+    - docker-compose --host $STAGE_DOCKER_HOST  up -d --force-recreate --no-deps
   environment:
     name: master
     url: http://82.202.221.170
