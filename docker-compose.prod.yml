@@ -1,8 +1,15 @@
 version: "3.2"
 
+networks:
+  backend-network:
+    driver: bridge
+  frontend-network:
+    driver: bridge
+
 volumes:
   home-dir:
   vnode:
+  es-data:
 
 services:
   &sources sources:
@@ -15,6 +22,8 @@ services:
     user: 'root:root'
     hostname: *php-fpm-service
     environment:
+      ES_HOST: elasticsearch
+      ES_PORT: &es-port 9200
       FPM_PORT: &php-fpm-port 9000
       FPM_USER: "${USER_ID:-1000}"
       FPM_GROUP: "${GROUP_ID:-1000}"
@@ -29,8 +38,12 @@ services:
       - home-dir:/home/user
     entrypoint: /fpm-entrypoint.sh
     command: php-fpm --nodaemonize -d "opcache.enable=1" -d "display_startup_errors=off" -d "display_errors=off" -d "error_reporting=0"
+    networks:
+      - backend-network
+      - frontend-network
     depends_on:
       - *sources
+      - elasticsearch
 
   &ngnix nginx:
     image: registry.gitlab.com/pymba86/fias-es/nginx:stable
@@ -45,3 +58,16 @@ services:
     depends_on:
       - *php-fpm-service
       - *sources
+    networks:
+      - frontend-network
+
+  &elasticsearch elasticsearch:
+    image: blacktop/elasticsearch:6.6
+    restart: always
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - es-data:/usr/share/elasticsearch/data:rw
+    ports: ['9200:9200', '9300:9300']
+    networks:
+      - backend-network

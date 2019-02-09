@@ -29,7 +29,7 @@ class Console extends PhConsole
      * @var array Предустановленные обработчики
      */
     protected $middlewares = [
-        Factory::class => 'before'
+        //  Factory::class => 'before'
     ];
 
     /** @var array Список заданий, которые имеют планировщик */
@@ -75,6 +75,16 @@ class Console extends PhConsole
         });
 
         $this->initTasks();
+
+        /**
+         * Заполняем описания команд
+         * @var  $name string
+         * @var  $taskClass AbstractTask
+         */
+        foreach ($this->getTaskClasses() as $name => $taskClass) {
+            $taskClass::description($this);
+        }
+
     }
 
     /**
@@ -108,15 +118,7 @@ class Console extends PhConsole
     public function handle(array $argv = null)
     {
         $this->rawArgv = $argv ?? $_SERVER['argv'];
-
         $params = $this->getTaskParameters($this->rawArgv);
-
-        // Normalize in the form: ['app', 'task:action', 'param1', 'param2', ...]
-        $this->argv = array_merge(
-            [$argv[0] ?? null, $params['task'] . ':' . $params['action']],
-            $params['params']
-        );
-
         return $this->doHandle($params);
     }
 
@@ -126,27 +128,24 @@ class Console extends PhConsole
      */
     public function doHandle(array $parameters)
     {
-        /**
-         * Заполняем описания команд
-         * @var  $name string
-         * @var  $taskClass AbstractTask
-         */
-        foreach ($this->getTaskClasses() as $name => $taskClass) {
-            $taskClass::description($this);
-        }
+        // Normalize in the form: ['app', 'task:action', 'param1', 'param2', ...]
+        $this->argv = array_merge(
+            [$argv[0] ?? null, $parameters['task'] . ':' . $parameters['action']],
+            $parameters['params']
+        );
 
         if (isset($this->namespaces[$parameters['task']])) {
             $parameters['task'] = $this->namespaces[$parameters['task']];
+            $parameters['params'] = $this->application->parse($this->argv)->values(false);
 
-            $parser = new Parser();
-            $parameters['params'] = $parser->parse($this->argv);
+            if ($this->lastStatus) {
+                parent::handle($parameters);
+            }
 
-            parent::handle($parameters);
         } else {
-            $this->application->parse($this->argv);
+            $this->application->handle($this->argv);
         }
     }
-
 
     /**
      * Получить параметры задания
@@ -167,13 +166,13 @@ class Console extends PhConsole
             unset($argv[$i]);
         }
 
-        $taskAction += [null, null];
+        // $taskAction += [null, null];
 
         return [
             'task' => $taskAction[0],
             'action' => $taskAction[1],
             // For BC, still send params to handle()
-            'params' => \array_values($argv),
+            'params' => array_values($argv),
         ];
     }
 

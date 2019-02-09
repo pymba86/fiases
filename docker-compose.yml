@@ -8,6 +8,7 @@ networks:
 
 volumes:
   home-dir:
+  es-data:
 
 services:
 
@@ -21,6 +22,8 @@ services:
       - home-dir:/home/user
     hostname: *app-service
     environment:
+      ES_HOST: elasticsearch
+      ES_PORT: &es-port 9200
       FPM_PORT: &php-fpm-port 9000
       FPM_USER: "${USER_ID:-1000}"
       FPM_GROUP: "${GROUP_ID:-1000}"
@@ -30,6 +33,8 @@ services:
     command: keep-alive.sh
     networks:
       - backend-network
+    depends_on:
+      - elasticsearch
 
   &php-fpm-service php-fpm:
     <<: *app-service-template
@@ -58,3 +63,14 @@ services:
       - *php-fpm-service
     networks:
       - frontend-network
+
+  &elasticsearch elasticsearch:
+    image: blacktop/elasticsearch:6.6
+    restart: always
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - es-data:/usr/share/elasticsearch/data:rw
+    ports: ['9200:9200', '9300:9300']
+    networks:
+      - backend-network

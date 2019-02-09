@@ -18,7 +18,7 @@ class MainTask extends AbstractTask
         $console
             ->command('main:list', 'List scheduled tasks (if any)', false)
             ->tap($console)
-            ->command('main:run', 'Run scheduled tasks that are due', true);
+            ->command('main:main', 'Run scheduled tasks that are due', true);
     }
 
     /**

@@ -57,10 +57,10 @@ class UpdateTask extends AbstractTask
             foreach ($mappers as $mapper) {
                 // $pipe->pipe(new FilterData(new $mapper(), $dir, 10000, $filters));
                // $pipe->pipe(new CreateStructure(new $mapper()));
-                  $pipe->pipe(new InsertData(new $mapper, $dirFilter));
+               //   $pipe->pipe(new InsertData(new $mapper, $dirFilter));
             }
 
-             $pipe->run($state);
+           //  $pipe->run($state);
         } else {
             echo 'Папка не найдена';
         }

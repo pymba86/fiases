@@ -17,7 +17,10 @@ class TestTask extends AbstractTask
     {
         $console
             ->command('test:list', 'List scheduled tasks (if any)')
-            ->tap($console);
+            ->option('-n, --name <name>', 'Name', null, 'ok')
+            ->option('-a, --age [age]', 'Age', 'intval', 10)
+            ->tap($console)
+            ->schedule('@always');
     }
 
     public function mainAction(array $params)
@@ -25,7 +28,7 @@ class TestTask extends AbstractTask
         echo print_r($params);
     }
 
-    public function testAction(array $params)
+    public function listAction(array $params)
     {
         echo print_r($params);
     }

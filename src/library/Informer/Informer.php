@@ -27,30 +27,41 @@ class Informer implements InformerInterface {
      */
     public function __construct(SoapClient $soapClient = null)
     {
-        if ($soapClient === null) {
-            $soapClient = new SoapClient(self::DEFAULT_FIAS_WSDL, [
+        $this->soapClient = $soapClient;
+    }
+
+    /**
+     * Получить клиента для удаленного запроса
+     * @return SoapClient
+     */
+    public function client(): SoapClient {
+
+        if ($this->soapClient === null) {
+            $this->soapClient = new SoapClient(self::DEFAULT_FIAS_WSDL, [
                 'exceptions' => true,
             ]);
         }
-        $this->soapClient = $soapClient;
+        return $this->soapClient;
     }
+
     /**
      * @inheritdoc
      */
     public function getCompleteInfo(): InformerResultInterface
     {
-        $response = $this->soapClient->GetLastDownloadFileInfo();
+        $response = $this->client()->GetLastDownloadFileInfo();
         $res = new InformerResult;
         $res->setVersion((int) $response->GetLastDownloadFileInfoResult->VersionId);
         $res->setUrl($response->GetLastDownloadFileInfoResult->FiasCompleteXmlUrl);
         return $res;
     }
+
     /**
      * @inheritdoc
      */
     public function getDeltaInfo(int $version): InformerResultInterface
     {
-        $response = $this->soapClient->GetAllDownloadFileInfo();
+        $response = $this->client()->GetAllDownloadFileInfo();
         $versions = $this->sortResponseByVersion($response->GetAllDownloadFileInfoResult->DownloadFileInfo);
         $res = new InformerResult;
         foreach ($versions as $serviceVersion) {
@@ -63,6 +74,7 @@ class Informer implements InformerInterface {
         }
         return $res;
     }
+
     /**
      * Сортирует ответ по номерам версии по возрастанию.
      *

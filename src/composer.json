@@ -13,9 +13,10 @@
   },
   "require": {
     "php": ">=7.2",
-    "monolog/monolog": "^1.24",
-    "elasticsearch/elasticsearch": "^6.1",
     "adhocore/cli": "^0.3.2",
+    "adhocore/cron-expr": "^0.0.6",
+    "elasticsearch/elasticsearch": "^6.1",
+    "monolog/monolog": "^1.24",
     "phalcon/cli-options-parser": "^1.1"
   },
   "autoload-dev": {
