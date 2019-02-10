@@ -22,15 +22,8 @@ ENV PHPIZE_DEPS \
     libxslt-dev
 
 RUN apk add --no-cache --virtual .persistent-deps \
-    # for intl extension
-    icu-dev \
-    libicu-dev \
     # for soap
     libxml2-dev \
-    # for bz2 extension
-    bzip2-dev \
-    # for intl extension
-    libintl gettext-dev libxslt \
     # etc
     bash nano
 
@@ -38,7 +31,6 @@ RUN set -xe \
     && apk add --no-cache --virtual .build-deps \
         $PHPIZE_DEPS \
     && docker-php-ext-configure bcmath --enable-bcmath \
-    && docker-php-ext-configure intl --enable-intl \
     && docker-php-ext-configure pcntl --enable-pcntl \
     && docker-php-ext-configure mbstring --enable-mbstring \
     && docker-php-ext-configure soap --enable-soap \
@@ -53,15 +45,9 @@ RUN set -xe \
         json \
         xml \
         zip \
-        intl \
         pcntl \
-        iconv \
-        bz2 \
-        calendar \
-        exif \
         mbstring \
         soap \
-        gettext \
         opcache \
     && echo -e "opcache.memory_consumption=128\n\
 opcache.interned_strings_buffer=8\n\
