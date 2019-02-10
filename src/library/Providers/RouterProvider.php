@@ -2,7 +2,7 @@
 
 namespace Library\Providers;
 
-use Library\Api\Controllers\LoginController;
+use Library\Api\Controllers\SearchController;
 use Library\Middleware\ResponseMiddleware;
 use Phalcon\Di\ServiceProviderInterface;
 use Phalcon\DiInterface;
@@ -56,7 +56,7 @@ class RouterProvider implements ServiceProviderInterface
     {
         $routes = [
             // Class, Method, Route, Handler
-             [LoginController::class, '/login', 'get', '/']
+             [SearchController::class, '/', 'post', '/']
         ];
 
         return $routes;

@@ -10,6 +10,7 @@ use Library\Providers\ModelsMetadataProvider;
 use Library\Providers\RequestProvider;
 use Library\Providers\ResponseProvider;
 use Library\Providers\RouterProvider;
+use Library\Providers\SearchProvider;
 
 /**
  * Список сервисов, которые будут зарегистрированы в приложении API
@@ -24,6 +25,7 @@ return [
     ResponseProvider::class,
     RouterProvider::class,
     CacheDataProvider::class,
+    SearchProvider::class
 ];
 
 
