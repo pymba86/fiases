@@ -126,14 +126,17 @@ class Connection implements ConnectionInterface
         $groupby = isset($opt['aggs']) ? $opt['aggs'] : array();
         $scroll = isset($opt['scroll']) ? $opt['scroll'] : "";
 
+        $index =  isset($opt['index']) ? $opt['index'] : "";
+        $type =  isset($opt['type']) ? $opt['type'] : "";
+
         if (!$query) {
-            $query = array("match_all" => []);
+            $query = array("match_all" => new stdClass());
         }
 
         $offset = ($page - 1) * $limit;
 
-        $params['index'] = $opt['index'];
-        $params['type'] = $opt['type'];
+        $params['index'] = $index;
+        $params['type'] = $type;
         $params['size'] = $limit;
         $params['body']['query'] = $query;
 
@@ -177,7 +180,6 @@ class Connection implements ConnectionInterface
         if ($total > 0 and $hits) {
             foreach ($hits as $hit) {
                 $row = $hit['_source'];
-                $row['id'] = $hit['_id'];
                 $items[] = $row;
             }
         }
@@ -227,9 +229,9 @@ class Connection implements ConnectionInterface
         $pagination->current = $current;
         $pagination->next = $next;
         $pagination->last = $totalPage;
-        $pagination->items = $items;
         $pagination->from = $offset + 1;
         $pagination->to = $offset + $limit;
+        $pagination->items = $items;
 
         return $pagination;
     }
@@ -320,7 +322,7 @@ class Connection implements ConnectionInterface
             'id' => $item[$mapper->getPrimary()],
         ];
 
-        print_r($this->client->delete($params));
+       $this->client->delete($params);
     }
 
     /**
@@ -361,5 +363,10 @@ class Connection implements ConnectionInterface
 
         }
         return $typeFields;
+    }
+
+    public function __destruct()
+    {
+        $this->flush($this->insertQueue);
     }
 }

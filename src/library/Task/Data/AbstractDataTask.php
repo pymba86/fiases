@@ -120,9 +120,6 @@ abstract class AbstractDataTask extends AbstractTask
 
         } else {
             $this->errorRead($file);
-            throw new RuntimeException(
-                "Can't open xml file " . $file->getPath() . ' for reading'
-            );
         }
 
     }

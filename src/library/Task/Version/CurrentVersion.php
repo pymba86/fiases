@@ -2,7 +2,9 @@
 
 namespace Library\Task\Version;
 
+use Exception;
 use Library\Informer\InformerResultInterface;
+use Library\Search\ConnectionInterface;
 use Library\State\StateInterface;
 use Library\Task\AbstractTask;
 
@@ -32,10 +34,42 @@ class CurrentVersion extends AbstractTask
      */
     public function run(StateInterface $state): void
     {
+        $this->info("Удаленная версия определена: " . $this->informerResult->getVersion());
         $this->info("Получение установленной версии");
 
-        //TODO Получение версии из базы/файла
+        /** @var ConnectionInterface $search */
+        $search = $this->di->getShared('search');
 
-        $this->info("Версия определена");
+        try {
+
+            $installVersion = $search->find([
+                'index' => 'versions',
+                'type' => 'version',
+                'limit' => 10000,
+                'fields' => ['version'],
+            ]);
+
+            $versions = json_decode(json_encode($installVersion), True);
+            $items = $versions['items'];
+
+            if (isset($items)) {
+
+                $equalsVersion = array_filter($items, function ($item) {
+                   return ($item['version'] == $this->informerResult->getVersion());
+                });
+
+                if (count($equalsVersion) > 0) {
+                    $this->info('Удаленная версия уже установлена');
+                    $state->complete();
+                }
+
+            } else {
+                $this->info('Нет установленных версий');
+            }
+
+        } catch (Exception $exception) {
+            $this->info('Текущая версия: не определена');
+            $this->info($exception->getMessage());
+        }
     }
 }

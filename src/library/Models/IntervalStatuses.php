@@ -20,6 +20,16 @@ class IntervalStatuses extends AbstractMapper
     ];
 
     /**
+     * @var string
+     */
+    protected $indexName = 'interval_statuses';
+
+    /**
+     * @var string
+     */
+    protected $typeName = 'interval_status';
+
+    /**
      * @var string[]|string
      */
     protected $sqlPrimary = 'INTVSTATID';

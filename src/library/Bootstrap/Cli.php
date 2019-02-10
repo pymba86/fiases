@@ -5,7 +5,6 @@ namespace Library\Bootstrap;
 use Library\Cli\Console;
 use Library\Cli\Task\DataTask;
 use Library\Cli\Task\MainTask;
-use Library\Cli\Task\TestTask;
 use Library\Cli\Task\UpdateTask;
 use Library\Cli\Task\VersionTask;
 use Phalcon\Config\Adapter\Php as ConfigPhp;
@@ -16,12 +15,11 @@ use function Library\Core\appPath;
 class Cli extends AbstractBootstrap
 {
 
-    const NAME = 'fias-web';
+    const NAME = 'fias-es';
 
-    const VERSION = '0.0.2';
+    const VERSION = 'v.0.15.0';
 
     const TASKS = [
-        'test' => TestTask::class,
         'main' => MainTask::class,
         'update' => UpdateTask::class,
         'data' => DataTask::class,

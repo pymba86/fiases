@@ -36,6 +36,16 @@ class Houses extends AbstractMapper
     ];
 
     /**
+     * @var string
+     */
+    protected $indexName = 'houses';
+
+    /**
+     * @var string
+     */
+    protected $typeName = 'house';
+
+    /**
      * @var string[]|string
      */
     protected $sqlPrimary = 'HOUSEID';

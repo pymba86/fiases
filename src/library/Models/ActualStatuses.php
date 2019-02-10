@@ -20,6 +20,16 @@ class ActualStatuses extends AbstractMapper
     ];
 
     /**
+     * @var string
+     */
+    protected $indexName = 'actual_statuses';
+
+    /**
+     * @var string
+     */
+    protected $typeName = 'actual_status';
+
+    /**
      * @var string[]|string
      */
     protected $sqlPrimary = 'ACTSTATID';

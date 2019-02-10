@@ -18,6 +18,17 @@ class CenterStatuses extends AbstractMapper
         'CENTERSTID' => 'int',
         'NAME' => 'string',
     ];
+
+    /**
+     * @var string
+     */
+    protected $indexName = 'center_statuses';
+
+    /**
+     * @var string
+     */
+    protected $typeName = 'center_status';
+
     /**
      * @var string[]|string
      */

@@ -35,6 +35,16 @@ class Steads extends AbstractMapper
     ];
 
     /**
+     * @var string
+     */
+    protected $indexName = 'steads';
+
+    /**
+     * @var string
+     */
+    protected $typeName = 'stead';
+
+    /**
      * @var string[]|string
      */
     protected $sqlPrimary = 'STEADGUID';

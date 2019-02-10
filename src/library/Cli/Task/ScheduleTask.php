@@ -14,9 +14,9 @@ class ScheduleTask extends AbstractTask
     static function description(Console $console): void
     {
         $console
-            ->command('schedule:list', 'List scheduled tasks (if any)', false)
+            ->command('schedule:list', 'Получить список запланированных задач', false)
             ->tap($console)
-            ->command('schedule:run', 'Run scheduled tasks that are due', true);
+            ->command('schedule:run', 'Запустите запланированные задачи с учетом времени', true);
     }
 
     /**

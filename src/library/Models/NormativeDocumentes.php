@@ -23,6 +23,16 @@ class NormativeDocumentes extends AbstractMapper
     ];
 
     /**
+     * @var string
+     */
+    protected $indexName = 'normative_documentes';
+
+    /**
+     * @var string
+     */
+    protected $typeName = 'normative_document';
+
+    /**
      * @var string[]|string
      */
     protected $sqlPrimary = 'NORMDOCID';

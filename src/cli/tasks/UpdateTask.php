@@ -24,46 +24,17 @@ class UpdateTask extends AbstractTask
     static function description(Console $console): void
     {
         $console
-            ->command('update:list', 'Update all data in the table')
-            ->option('-a, --age [age]', 'Age', 'intval', 0)
+            ->command('update:all', 'Зазгрузить все дельты относительно текущей версии')
             ->tap($console)
-            ->command('update:main', 'Update all data in the table')
-            ->option('-a, --age [age]', 'Age', 'intval', 0)
+            ->command('update:load', 'Загрузить определенную дельту версию')
             ->tap($console)
-            ->command('update:last', 'Update database')
-            ->argument('[force]', 'Drop database')
-            ->option('-n, --name <name>', 'Name')
-            ->option('-a, --age [age]', 'Age', 'intval', 0)
-            ->option('-h, --hobbies [...]', 'Hobbies');
+            ->command('update:version', 'Получить актуальную удаленную версию');
     }
 
 
     public function mainAction(array $params)
     {
-        $pipe = new Pipe($this->di);
-        $state = new ArrayState();
 
-        /** @var DirectoryInterface $fs */
-        $fs = $this->di->get("fs");
-
-        /** @var AbstractMapper[] $mappers */
-        $mappers = new ConfigPhp(appPath("config/mappers.php"));
-        /** @var array $filters */
-        $filters = new ConfigPhp(appPath("config/filters.php"));
-
-        $dirFilter = $fs->createChildDirectory("filter");
-
-        if ($dirFilter->isExists()) {
-            foreach ($mappers as $mapper) {
-                // $pipe->pipe(new FilterData(new $mapper(), $dir, 10000, $filters));
-               // $pipe->pipe(new CreateStructure(new $mapper()));
-               //   $pipe->pipe(new InsertData(new $mapper, $dirFilter));
-            }
-
-           //  $pipe->run($state);
-        } else {
-            echo 'Папка не найдена';
-        }
     }
 
     public function testAction(array $params)

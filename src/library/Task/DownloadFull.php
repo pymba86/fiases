@@ -28,10 +28,10 @@ class DownloadFull extends AbstractTask
     protected $informerResult;
 
     /**
-     * @param string $file
+     * @param FileInterface $file
      * @param InformerResultInterface $informerResult
      */
-    public function __construct(string $file, InformerResultInterface $informerResult)
+    public function __construct(FileInterface $file, InformerResultInterface $informerResult)
     {
         $this->file = $file;
         $this->informerResult = $informerResult;
@@ -84,7 +84,6 @@ class DownloadFull extends AbstractTask
         $downloader = $this->di->get("downloader");
 
         try {
-
             $this->info("Загрузка файла из {$url} в " . $this->file->getPath());
             $downloader->download($url, $this->file);
             $this->info('Загрузка заверщена ' . $this->file->getPath());

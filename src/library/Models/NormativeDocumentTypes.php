@@ -20,6 +20,16 @@ class NormativeDocumentTypes extends AbstractMapper
     ];
 
     /**
+     * @var string
+     */
+    protected $indexName = 'normative_document_types';
+
+    /**
+     * @var string
+     */
+    protected $typeName = 'normative_document_type';
+
+    /**
      * @var string[]|string
      */
     protected $sqlPrimary = 'NDTYPEID';

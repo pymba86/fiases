@@ -20,6 +20,16 @@ class HouseStateStatuses extends AbstractMapper
     ];
 
     /**
+     * @var string
+     */
+    protected $indexName = 'house_state_statuses';
+
+    /**
+     * @var string
+     */
+    protected $typeName = 'house_state_status';
+
+    /**
      * @var string[]|string
      */
     protected $sqlPrimary = 'HOUSESTID';

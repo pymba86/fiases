@@ -20,6 +20,16 @@ class OperationStatuses extends AbstractMapper
     ];
 
     /**
+     * @var string
+     */
+    protected $indexName = 'operation_statuses';
+
+    /**
+     * @var string
+     */
+    protected $typeName = 'operation_status';
+
+    /**
      * @var string[]|string
      */
     protected $sqlPrimary = 'OPERSTATID';

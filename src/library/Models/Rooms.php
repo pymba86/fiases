@@ -31,6 +31,16 @@ class Rooms extends AbstractMapper
     ];
 
     /**
+     * @var string
+     */
+    protected $indexName = 'rooms';
+
+    /**
+     * @var string
+     */
+    protected $typeName = 'room';
+
+    /**
      * @var string[]|string
      */
     protected $sqlPrimary = 'ROOMID';

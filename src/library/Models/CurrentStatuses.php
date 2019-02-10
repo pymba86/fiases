@@ -18,6 +18,17 @@ class CurrentStatuses extends AbstractMapper
         'CURENTSTID' => 'int',
         'NAME' => 'string',
     ];
+
+    /**
+     * @var string
+     */
+    protected $indexName = 'current_statuses';
+
+    /**
+     * @var string
+     */
+    protected $typeName = 'current_status';
+
     /**
      * @var string[]|string
      */

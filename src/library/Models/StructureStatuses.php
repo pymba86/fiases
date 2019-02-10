@@ -21,6 +21,16 @@ class StructureStatuses extends AbstractMapper
     ];
 
     /**
+     * @var string
+     */
+    protected $indexName = 'structure_statuses';
+
+    /**
+     * @var string
+     */
+    protected $typeName = 'structure_status';
+
+    /**
      * @var string[]|string
      */
     protected $sqlPrimary = 'STRSTATID';

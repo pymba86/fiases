@@ -74,8 +74,12 @@ class FilterData extends AbstractTask
      */
     public function run(StateInterface $state): void
     {
-        $this->processFileToMask($this->filterDir, $this->mapper->getInsertFileMask());
-        $this->processFileToMask($this->filterDir, $this->mapper->getDeleteFileMask());
+        if (!$this->filterDir->isExists()) {
+            $this->filterDir->create();
+        }
+
+        $this->processFileToMask($this->dir, $this->mapper->getInsertFileMask());
+        $this->processFileToMask($this->dir, $this->mapper->getDeleteFileMask());
     }
 
     /**
@@ -128,7 +132,6 @@ class FilterData extends AbstractTask
                 if (($validationItems > 0) && ($validationItems % $this->iterations == 0)) {
                     // Сбрасываем данные на диск
                     $this->flush($xmlFile, $xmlWriter);
-                    echo $validationItems;
                 }
 
                 if ($this->validationItem($item)) {
@@ -201,9 +204,8 @@ class FilterData extends AbstractTask
     protected function validationItem(array $item): bool
     {
         foreach ($this->fields as $nameField => $valueField) {
-            $valueItem = $item[$nameField];
-            if (array_key_exists($nameField, $item) && !empty($valueItem)) {
-                if ($valueItem !== $valueField) {
+            if (array_key_exists($nameField, $item)) {
+                if ($item[$nameField] != $valueField) {
                     return false;
                 }
             }
@@ -229,14 +231,8 @@ class FilterData extends AbstractTask
      */
     protected function createFile(FileInterface $file): FileInterface
     {
-        if ($this->dir->isExists()) {
-            $file = $this->dir->createChildFile("{$file->getFilename()}.XML");
-            file_put_contents($file->getPath(), null);
-            return $file;
-        } else {
-            throw new RuntimeException(
-                "Can't create xml file " . $file->getPath() . ' for writing'
-            );
-        }
+        $file = $this->filterDir->createChildFile("{$file->getFilename()}.XML");
+        file_put_contents($file->getPath(), null);
+        return $file;
     }
 }

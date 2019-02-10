@@ -22,6 +22,16 @@ class AddressObjectTypes extends AbstractMapper
     ];
 
     /**
+     * @var string
+     */
+    protected $indexName = 'address_object_types';
+
+    /**
+     * @var string
+     */
+    protected $typeName = 'address_object_type';
+
+    /**
      * @var string[]|string
      */
     protected $sqlPrimary = 'KOD_T_ST';

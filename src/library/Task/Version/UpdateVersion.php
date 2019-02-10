@@ -3,6 +3,8 @@
 namespace Library\Task\Version;
 
 use Library\Informer\InformerResultInterface;
+use Library\Models\Versions;
+use Library\Search\ConnectionInterface;
 use Library\State\StateInterface;
 use Library\Task\AbstractTask;
 
@@ -34,7 +36,10 @@ class UpdateVersion extends AbstractTask
     {
         $this->info("Сохраняем установленную версию");
 
-        //TODO Сохранение версии в базу/файла
+        /** @var ConnectionInterface $search */
+        $search = $this->di->getShared('search');
+
+        $search->save(new Versions(), ['version' => strval($this->informerResult->getVersion()), 'data' => time()]);
 
         $this->info("Сохранение прошло успешно");
     }

@@ -20,6 +20,16 @@ class EstateStatuses extends AbstractMapper
     ];
 
     /**
+     * @var string
+     */
+    protected $indexName = 'estate_statuses';
+
+    /**
+     * @var string
+     */
+    protected $typeName = 'estate_status';
+
+    /**
      * @var string[]|string
      */
     protected $sqlPrimary = 'ESTSTATID';

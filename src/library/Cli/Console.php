@@ -2,6 +2,8 @@
 
 namespace Library\Cli;
 
+use Ahc\Cli\IO\Interactor;
+use Exception;
 use Library\Cli\Middleware\Factory;
 use Phalcon\Cop\Parser;
 use Library\Cli\Task\AbstractTask;
@@ -134,10 +136,21 @@ class Console extends PhConsole
             $parameters['params']
         );
 
-        if (isset($this->namespaces[$parameters['task']])) {
+        if (isset($this->namespaces[$parameters['task']]) && isset($parameters['action'])) {
             $parameters['task'] = $this->namespaces[$parameters['task']];
-            $parameters['params'] = $this->application->parse($this->argv)->values(false);
 
+            $this->application->commandFor($this->argv)->onExit(function() {
+               $this->lastStatus = false;
+            });
+
+
+            try {
+                $parameters['params'] = $this->application->parse($this->argv)->values(false);
+            } catch (Exception $exception) {
+                $io = new Interactor();
+                $io->boldRed($exception->getMessage(), true);
+                return;
+            }
             if ($this->lastStatus) {
                 parent::handle($parameters);
             }
@@ -166,7 +179,7 @@ class Console extends PhConsole
             unset($argv[$i]);
         }
 
-        // $taskAction += [null, null];
+         $taskAction += [null, null];
 
         return [
             'task' => $taskAction[0],
