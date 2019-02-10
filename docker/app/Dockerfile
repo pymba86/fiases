@@ -22,12 +22,13 @@ ENV PHPIZE_DEPS \
     libxslt-dev
 
 RUN apk add --no-cache --virtual .persistent-deps \
-    bzip2-dev \
     # for intl extension
     icu-dev \
+    libicu-dev \
     # for soap
     libxml2-dev \
     # for bz2 extension
+    bzip2-dev \
     # for intl extension
     libintl gettext-dev libxslt \
     # etc
@@ -47,12 +48,17 @@ RUN set -xe \
     && docker-php-ext-configure fileinfo --enable-fileinfo \
     && docker-php-ext-configure opcache --enable-opcache \
     && docker-php-ext-install -j$(nproc) \
+        bcmath \
         fileinfo \
         json \
         xml \
         zip \
         intl \
         pcntl \
+        iconv \
+        bz2 \
+        calendar \
+        exif \
         mbstring \
         soap \
         gettext \
