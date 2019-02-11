@@ -14,6 +14,7 @@ volumes:
 services:
   &sources sources:
     image: registry.gitlab.com/pymba86/fias-es/sources:stable
+    restart: always
     volumes:
       - vnode:/src
 
@@ -21,6 +22,7 @@ services:
     image: registry.gitlab.com/pymba86/fias-es/app:stable
     user: 'root:root'
     hostname: *php-fpm-service
+    restart: always
     environment:
       ES_HOST: elasticsearch
       ES_PORT: &es-port 9200
@@ -48,6 +50,7 @@ services:
   &ngnix nginx:
     image: registry.gitlab.com/pymba86/fias-es/nginx:stable
     working_dir: /usr/share/nginx/html
+    restart: always
     environment:
       FPM_HOST: *php-fpm-service
       FPM_PORT: *php-fpm-port
