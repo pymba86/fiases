@@ -32,7 +32,7 @@ class DataTask extends AbstractTask
             ->option('-p, --path <path>', 'Путь к файлам xml')
             ->option('-f, --filter <filter>', 'Путь к отфильтрованным данным xml')
             ->tap($console)
-            ->command('data:remove', ' Очистка временной директории', false)
+            ->command('data:remove', 'Очистка временной директории', false)
             ->option('-p, --path <path>', 'Путь к директории')
             ->tap($console)
             ->command('data:create', 'Создание структуры данных', true)

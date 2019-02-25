@@ -255,18 +255,8 @@ class Connection implements ConnectionInterface
                             'address' => [
                                 'type' => 'custom',
                                 'tokenizer' => 'whitespace',
-                                'filter' => ['trim', 'lowercase'],
-                                "char_filter" => [
-                                    "useless_symbols",
-                                ],
+                                'trim' => ['trim', 'lowercase']
                             ],
-                        ],
-                        'char_filter' => [
-                            'useless_symbols' => [
-                                "type" => "pattern_replace",
-                                "pattern" => "[,\.:].*",
-                                "replacement" => ""
-                            ]
                         ]
                     ],
                 ],
@@ -354,11 +344,6 @@ class Connection implements ConnectionInterface
 
             if ($field instanceof IntNumber) {
                 $typeFields[$name] = 'long';
-            }
-
-            if ($field instanceof Date) { // 1900-01-01 00:00:00
-                //FIXME Формат даты не подходит
-               // $typeFields[$name] = ['date',$field::DATE_FORMAT];
             }
 
         }

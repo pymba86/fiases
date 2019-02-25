@@ -23,21 +23,20 @@ use Library\Models\Rooms;
  * В случае если один из них не понадобиться, нужно закоментировать - он будет пропушен
  */
 return [
-//    FlatTypes::class,
-//    HouseStateStatuses::class,
-//    IntervalStatuses::class,
-//    NormativeDocumentTypes::class,
-//    OperationStatuses::class,
-//    RoomTypes::class,
-//    StructureStatuses::class,
+    FlatTypes::class,
+    HouseStateStatuses::class,
+    IntervalStatuses::class,
+    NormativeDocumentTypes::class,
+    OperationStatuses::class,
+    RoomTypes::class,
+    StructureStatuses::class,
     AddressObjects::class,
-//   NormativeDocumentes::class, - не надо! не фильтровал 4 гб (нужно убрать ссылку на него из других таблиц)
-//    Steads::class,
-//    Rooms::class,
-//    Houses::class,
-//    ActualStatuses::class,
-//    CenterStatuses::class,
-//    CurrentStatuses::class,
-//    EstateStatuses::class,
-//    AddressObjectTypes::class
+    Steads::class,
+    Rooms::class,
+    Houses::class,
+    ActualStatuses::class,
+    CenterStatuses::class,
+    CurrentStatuses::class,
+    EstateStatuses::class,
+    AddressObjectTypes::class
 ];
