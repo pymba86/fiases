@@ -15,5 +15,6 @@ class MapperFactory {
 
     protected function build(string $descriptionField): FieldInterface {
 
+        return new Field\Line();
     }
 }
