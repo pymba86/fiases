@@ -14,7 +14,7 @@ class Curl implements DownloaderInterface {
     /**
      * @inheritdoc
      */
-    public function download(string $urlToDownload, FileInterface $localFile)
+    public function download(string $urlToDownload, FileInterface $localFile): void
     {
         $fh = $this->openLocalFile($localFile);
         $requestOptions = [

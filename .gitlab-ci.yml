@@ -157,14 +157,20 @@ Build sources image (stable):
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-Deploy services 82.202.221.170 (stable):
+Deploy services 176.57.208.176 (stable):
   stage: deploy
   only: *stable-only
   except: *build-image-except
   variables:
-    STAGE_DOCKER_HOST: tcp://82.202.221.170:2375
+    STAGE_DOCKER_HOST: tcp://176.57.208.176:2376
+    DOCKER_TLS_VERIFY: 1
+    DOCKER_CERT_PATH: "/certs"
     COMPOSE_FILE: docker-compose.prod.yml
   script:
+    - mkdir -p $DOCKER_CERT_PATH
+    - echo "$TLSCACERT" > $DOCKER_CERT_PATH/ca.pem
+    - echo "$TLSCERT" > $DOCKER_CERT_PATH/cert.pem
+    - echo "$TLSKEY" > $DOCKER_CERT_PATH/key.pem
     - docker login -u gitlab-ci-token -p "$CI_JOB_TOKEN" registry.gitlab.com
     - docker-compose --host $STAGE_DOCKER_HOST  pull
     - docker-compose --host $STAGE_DOCKER_HOST  down
@@ -175,4 +181,4 @@ Deploy services 82.202.221.170 (stable):
     - docker-compose --host $STAGE_DOCKER_HOST  up -d --force-recreate --no-deps
   environment:
     name: master
-    url: http://82.202.221.170
+    url: http://176.57.208.176
