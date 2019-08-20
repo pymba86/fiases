@@ -52,9 +52,9 @@ class MainTask extends AbstractTask
         /** @var DirectoryInterface $fs */
         $fs = $this->di->get("fs");
 
-        /** @var AbstractMapper[] $mappers */
+        /** @var ConfigPhp $mappers */
         $mappers = new ConfigPhp(appPath("config/mappers.php"));
-        /** @var array $filters */
+        /** @var ConfigPhp $filters */
         $filters = new ConfigPhp(appPath("config/filters.php"));;
 
         $dirFilter = $fs->createChildDirectory($params['filter']);
@@ -66,8 +66,8 @@ class MainTask extends AbstractTask
         //$pipe->pipe(new Unpack($params['name'],$dirSource));
 
         foreach ($mappers as $mapper) {
-            // $objectMapper = new $mapper();
-            // $pipe->pipe(new FilterData($objectMapper, $dirSource, $dirFilter, 10000, $filters->toArray()));
+             $objectMapper = new $mapper();
+             $pipe->pipe(new FilterData($objectMapper, $dirSource, $dirFilter, 10000, $filters->toArray()));
             // $pipe->pipe(new CreateStructure($objectMapper));
             //   $pipe->pipe(new InsertData($objectMapper, $dirFilter));
         }

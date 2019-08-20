@@ -20,6 +20,7 @@ class NormativeDocumentes extends AbstractMapper
         'DOCDATE' => 'date',
         'DOCNUM' => 'string',
         'DOCTYPE' => 'string',
+        'DOCIMGID' => 'int',
     ];
 
     /**

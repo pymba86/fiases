@@ -17,6 +17,7 @@ class Steads extends AbstractMapper
     protected $fields = [
         'STEADGUID' => 'uuid',
         'NUMBER' => 'string',
+        'CADNUM' => 'string',
         'REGIONCODE' => ['string', 2],
         'POSTALCODE' => ['string', 6],
         'IFNSFL' => ['string', 4],

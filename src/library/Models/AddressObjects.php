@@ -21,6 +21,7 @@ class AddressObjects extends AbstractMapper
         'NEXTID' => 'uuid',
         'FORMALNAME' => 'string',
         'OFFNAME' => 'string',
+        'CADNUM' => 'string',
         'SHORTNAME' => 'string',
         'AOLEVEL' => 'int',
         'REGIONCODE' => ['string', 2],

@@ -12,6 +12,11 @@ class Houses extends AbstractMapper
 {
 
     /**
+     * @var string
+     */
+    protected $indexName = 'houses';
+
+    /**
      * @var mixed[]
      */
     protected $fields = [
@@ -24,6 +29,11 @@ class Houses extends AbstractMapper
         'ESTSTATUS' => 'int',
         'STATSTATUS' => 'int',
         'IFNSFL' => ['string', 4],
+        'BUILDNUM' => ['string', 10],
+        'CADNUM' => ['string', 100],
+        'STRUCNUM' => ['string', 10],
+        'TERRIFNSFL' => ['string', 4],
+        'TERRIFNSUL' => ['string', 4],
         'IFNSUL' => ['string', 4],
         'OKATO' => ['string', 11],
         'OKTMO' => ['string', 11],
@@ -34,11 +44,6 @@ class Houses extends AbstractMapper
         'COUNTER' => 'int',
         'DIVTYPE' => 'int',
     ];
-
-    /**
-     * @var string
-     */
-    protected $indexName = 'houses';
 
     /**
      * @var string

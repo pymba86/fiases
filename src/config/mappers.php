@@ -31,6 +31,7 @@ return [
     RoomTypes::class,
     StructureStatuses::class,
     AddressObjects::class,
+    // NormativeDocumentes::class, -- не используется
     Steads::class,
     Rooms::class,
     Houses::class,

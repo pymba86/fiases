@@ -20,6 +20,7 @@ class Rooms extends AbstractMapper
         'HOUSEGUID' => 'uuid',
         'REGIONCODE' => ['string', 2],
         'FLATNUMBER' => ['string', 50],
+        'ROOMNUMBER' => ['string', 50],
         'FLATTYPE' => 'int',
         'POSTALCODE' => ['string', 6],
         'STARTDATE' => 'date',
@@ -27,6 +28,7 @@ class Rooms extends AbstractMapper
         'UPDATEDATE' => 'date',
         'OPERSTATUS' => 'string',
         'LIVESTATUS' => 'string',
+        'CADNUM' => 'string',
         'NORMDOC' => 'uuid',
     ];
 

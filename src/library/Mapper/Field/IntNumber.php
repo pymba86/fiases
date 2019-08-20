@@ -8,7 +8,8 @@ use InvalidArgumentException;
  * Целочисленный тип поля
  * @package Library\Mapper\Field
  */
-class IntNumber implements FieldInterface {
+class IntNumber implements FieldInterface
+{
 
     /**
      * Максимальная длина числа.
@@ -16,6 +17,7 @@ class IntNumber implements FieldInterface {
      * @var int
      */
     protected $length = 10;
+
     /**
      * @param int $length
      */
@@ -23,6 +25,7 @@ class IntNumber implements FieldInterface {
     {
         $this->length = $length;
     }
+
     /**
      * Возвращает максимальную длину числа.
      *
@@ -40,8 +43,9 @@ class IntNumber implements FieldInterface {
      */
     public function convertToString($input): string
     {
-        return (string) $this->checkNumber((string) $input);
+        return (string)$this->checkNumber((string)$input);
     }
+
     /**
      * {@inheritdoc}
      *
@@ -49,7 +53,7 @@ class IntNumber implements FieldInterface {
      */
     public function convertToData(string $input)
     {
-        return (int) $this->checkNumber($input);
+        return (int)$this->checkNumber($input);
     }
 
     /**
