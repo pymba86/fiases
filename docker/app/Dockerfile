@@ -1,10 +1,14 @@
-FROM mileschou/phalcon:7.2-fpm-alpine
-LABEL Description="fias-es-app"
+FROM composer:1.8.6 AS composer
+FROM 512k/roadrunner:1.4.6 AS roadrunner
 
-ENV PS1='\[\033[1;32m\]🐳  \[\033[1;36m\][\u@\h] \[\033[1;34m\]\w\[\033[0;35m\] \[\033[1;36m\]# \[\033[0m\]'
+FROM mileschou/phalcon:7.2-alpine
 
-ENV PHP_XDEBUG_VERSION 2.6.0
-ENV COMPOSER_VERSION 1.8.3
+ENV \
+    COMPOSER_ALLOW_SUPERUSER="1" \
+    COMPOSER_HOME="/tmp/composer" \
+    OWN_SSL_CERT_DIR="/ssl-cert" \
+    OWN_SSL_CERT_LIFETIME=1095 \
+    PS1='\[\033[1;32m\]\[\033[1;36m\][\u@\h] \[\033[1;34m\]\w\[\033[0;35m\] \[\033[1;36m\]# \[\033[0m\]'
 
 # persistent / runtime deps
 ENV PHPIZE_DEPS \
@@ -21,13 +25,15 @@ ENV PHPIZE_DEPS \
     re2c \
     libxslt-dev
 
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+COPY --from=roadrunner /usr/bin/rr /usr/bin/rr
+
 RUN apk add --no-cache --virtual .persistent-deps \
-    # for soap
-    libxml2-dev \
     # etc
     bash nano
 
 RUN set -xe \
+    && apk add --no-cache ${PERMANENT_DEPS} \
     && apk add --no-cache --virtual .build-deps \
         $PHPIZE_DEPS \
     && docker-php-ext-configure bcmath --enable-bcmath \
@@ -49,54 +55,41 @@ RUN set -xe \
         mbstring \
         soap \
         opcache \
-    && echo -e "opcache.memory_consumption=128\n\
-opcache.interned_strings_buffer=8\n\
-opcache.max_accelerated_files=4000\n\
-opcache.revalidate_freq=60\n\
-opcache.fast_shutdown=1\n\
-opcache.enable_cli=1\n\
-opcache.enable=1\n" > /usr/local/etc/php/conf.d/opcache.ini \
     # For phpunit coverage
-    && pecl install xdebug-${PHP_XDEBUG_VERSION} \
     && pecl install rar \
+    && pecl install runkit \
     && apk del .build-deps \
-    && rm -rf /tmp/* \
-    && rm -rf /app \
-    && mkdir /app \
-    && rm -rf /scripts \
-    && mkdir /scripts \
-    && mkdir -p /scripts/aliases \
-    && rm -rf /home/user \
-    && mkdir /home/user \
-    && chmod 777 /home/user \
-    && rm -f /docker-entrypoint.sh \
-    && rm -f /usr/local/etc/php-fpm.d/*
+    && rm -rf /app /home/user ${COMPOSER_HOME} /var/cache/apk/* \
+    && mkdir /app /home/user ${COMPOSER_HOME} \
+    && composer global require 'hirak/prestissimo' --no-interaction --no-suggest --prefer-dist \
+    && ln -s /usr/bin/composer /usr/bin/c
 
-COPY ./etc/php/php.ini /usr/local/etc/php/php.ini
-COPY ./etc/php/php-fpm.conf /usr/local/etc/php-fpm.conf
-
-ENV COMPOSER_ALLOW_SUPERUSER 1
-ENV COMPOSER_HOME /tmp
-ENV PATH /scripts:/scripts/aliases:$PATH
-
-RUN set -xe \
-    && mkdir -p "$COMPOSER_HOME" \
-    # install composer
-    && php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');" \
-    && php /tmp/composer-setup.php --no-ansi --install-dir=/usr/bin --filename=composer --version=$COMPOSER_VERSION \
-    && composer --ansi --version --no-interaction \
-    && composer --no-interaction global require 'hirak/prestissimo' \
-    && composer clear-cache \
-    && rm -rf /tmp/composer-setup.php /tmp/.htaccess \
-    # show php info
-    && php -v \
-    && php-fpm -v \
-    && php -m
-
-COPY ./keep-alive.sh /scripts/keep-alive.sh
-COPY ./fpm-entrypoint.sh /fpm-entrypoint.sh
-COPY ./aliases/* /scripts/aliases/
+COPY ./docker/app/etc/php/php.ini /usr/local/etc/php/php.ini
+COPY ./docker/app/etc/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+COPY ./docker/app/app-entrypoint.sh /app-entrypoint.sh
 
 WORKDIR /app
-ENTRYPOINT []
-CMD []
+
+COPY ./composer.* /app/
+
+RUN set -xe \
+    && composer install --no-interaction --no-ansi --no-suggest --prefer-dist  --no-autoloader --no-scripts \
+    && composer install --no-dev --no-interaction --no-ansi --no-suggest --prefer-dist  --no-autoloader --no-scripts \
+    && chmod -R 777 /home/user ${COMPOSER_HOME}
+
+COPY . /app
+
+RUN set -xe \
+    && chmod +x /app-entrypoint.sh \
+    && composer --version \
+    && php -v \
+    && php -m \
+    && rr -h \
+    && composer dump
+
+EXPOSE 80
+EXPOSE 443
+VOLUME ["/app"]
+
+ENTRYPOINT ["/app-entrypoint.sh"]
+CMD ["rr", "serve", "-c", "/app/.rr.yml"]

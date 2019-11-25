@@ -1,0 +1,15 @@
+version: '3.3'
+services:
+  app:
+    volumes:
+      - ./docker/app/app-entrypoint.sh:/app-entrypoint.sh:ro
+      - .:/app:cached
+      - home-dir:/home/user:cached
+
+  elasticsearch:
+    volumes:
+      - es-data:/usr/share/elasticsearch/data:rw
+
+volumes:
+  home-dir:
+  es-data:

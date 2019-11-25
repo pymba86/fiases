@@ -1,3 +1,9 @@
 .idea
 *.impl
 *.env
+
+.bundle
+vendor
+.idea
+
+.phpunit.result.cache
