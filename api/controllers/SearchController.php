@@ -21,7 +21,8 @@ class SearchController extends Controller
      */
     public function callAction()
     {
-        $request = $this->request->getJsonRawBody(true);
+        $request = json_decode($this->request->get('body'), true);
+        
         /** @var ConnectionInterface $search */
         $search = $this->di->getShared('search');
 

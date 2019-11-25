@@ -64,31 +64,9 @@ class Response extends PhResponse
      */
     public function send(): ResponseInterface
     {
-        $content = $this->getContent();
-        $timestamp = date('c');
-        $hash = sha1($timestamp . $content);
-        $eTag = sha1($content);
-        /** @var array $content */
         $content = json_decode($this->getContent(), true);
-        $jsonapi = [
-            'jsonapi' => [
-                'version' => '1.0',
-            ],
-        ];
-        $meta = [
-            'meta' => [
-                'timestamp' => $timestamp,
-                'hash' => $hash,
-            ]
-        ];
-        /**
-         * Join the array again
-         */
-        $data = $jsonapi + $content + $meta;
-        $this
-            ->setHeader('E-Tag', $eTag)
-            ->setJsonContent($data);
-        return parent::send();
+        $this->setJsonContent($content);
+       // return parent::send();
     }
 
     /**

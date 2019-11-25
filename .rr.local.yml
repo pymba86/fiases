@@ -61,10 +61,10 @@ http:
     # worker pool configuration.
     pool:
       # number of workers to be serving.
-      numWorkers: 4
+      numWorkers: 1
 
       # maximum jobs per worker, 0 - unlimited.
-      maxJobs: 24
+      maxJobs: 1
 
       # for how long worker is allowed to be bootstrapped.
       allocateTimeout: 60
@@ -73,14 +73,14 @@ http:
       destroyTimeout: 60
 
 # Additional HTTP headers and CORS control.
-headers:
-  # Automatically add headers to every request passed to PHP.
-  request:
-  #  "Example-Request-Header": "Value"
-
-  # Automatically add headers to every response.
-  response:
-    "X-Powered-By": "RoadRunner"
+#headers:
+#  # Automatically add headers to every request passed to PHP.
+#  request:
+#  #  "Example-Request-Header": "Value"
+#
+#  # Automatically add headers to every response.
+#  response:
+#    "X-Powered-By": "RoadRunner"
 
 # monitors rr server(s)
 limit:

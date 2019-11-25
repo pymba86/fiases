@@ -1,6 +1,5 @@
 <?php
 
-use Dotenv\Dotenv;
 use Phalcon\Loader;
 
 use function Library\Core\appPath;
@@ -22,7 +21,7 @@ $loader->registerNamespaces($namespaces);
 $loader->register();
 
 // Composer Autoloader
-require appPath('vendor/autoload.php');
+# require appPath('vendor/autoload.php');
 
 
 // Загрузка окружения

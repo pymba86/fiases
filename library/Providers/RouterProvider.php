@@ -56,7 +56,7 @@ class RouterProvider implements ServiceProviderInterface
     {
         $routes = [
             // Class, Method, Route, Handler
-             [SearchController::class, '/', 'post', '/']
+            [SearchController::class, '/', 'post', '/']
         ];
 
         return $routes;

@@ -13,7 +13,6 @@ return [
             'development' === envValue('APP_ENV', 'development')
         ),
         'baseUri'      => envValue('APP_BASE_URI'),
-        'supportEmail' => envValue('APP_SUPPORT_EMAIL'),
         'time'         => microtime(true),
     ],
     'cache'      => [

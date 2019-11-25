@@ -22,9 +22,9 @@ class ResponseMiddleware  implements  MiddlewareInterface {
     public function call(Micro $application)
     {
         /** @var Response $response */
-        $response = $application->getService('response');
-        $response->send();
-        return true;
+       // $response = $application->getService('response');
+       // $response->getContent();
+        return false;
     }
 
 }

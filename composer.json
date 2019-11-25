@@ -1,6 +1,6 @@
 {
-  "name": "pymba86/fias-web",
-  "description": "fias-web",
+  "name": "pymba86/fiases",
+  "description": "fiases",
   "keywords": [
     "fias"
   ],
@@ -18,6 +18,7 @@
     "adhocore/cron-expr": "^0.0.6",
     "elasticsearch/elasticsearch": "^6.1",
     "monolog/monolog": "^1.24",
+    "nyholm/psr7": "^1.2",
     "phalcon/cli-options-parser": "^1.1",
     "spiral/dumper": "^1.1",
     "spiral/roadrunner": "^1.5"

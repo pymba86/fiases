@@ -19,12 +19,8 @@ return [
     ConfigProvider::class,
     LoggerProvider::class,
     ErrorHandlerProvider::class,
-   // DatabaseProvider::class,
-   // ModelsMetadataProvider::class,
-    RequestProvider::class,
     ResponseProvider::class,
     RouterProvider::class,
-   // CacheDataProvider::class,
     SearchProvider::class
 ];
 

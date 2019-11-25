@@ -1,9 +1,15 @@
-.idea
-*.impl
-*.env
+## IDEs
+/nbproject
+/.idea
 
-.bundle
-vendor
-.idea
+## Vendors
+/vendor
 
+## etc.
+/public/hot
+/public/storage
+/storage/*.key
+/storage/coverage
+coverage*
+.env
 .phpunit.result.cache

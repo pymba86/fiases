@@ -22,6 +22,7 @@ class ResponseProvider implements ServiceProviderInterface
                 $response
                     ->setStatusCode(200)
                     ->setContentType('application/json', 'UTF-8');
+                
                 return $response;
             });
     }

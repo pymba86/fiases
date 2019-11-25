@@ -18,12 +18,15 @@ class SearchProvider implements ServiceProviderInterface
             'search',
             function () {
 
-                $host = envValue('DATA_API_ELASTICSEARCH_HOST', 'elasticsearch:9200');
+                $host = envValue('ES_HOST', 'elasticsearch');
+                $port = envValue('ES_PORT', '9200');
+                
+                $clientHost = $host . ":" . $port;
 
-                $batchLimit = envValue('DATA_API_ELASTICSEARCH_BATCH_LIMIT', 50);
+                $batchLimit = envValue('ES_BATCH_LIMIT', 10000);
 
                 $clientBuilder = ClientBuilder::create();
-                $clientBuilder->setHosts([$host]);
+                $clientBuilder->setHosts([$clientHost]);
                 $client = $clientBuilder->build();
 
                 $connection = new Connection($client, $batchLimit);

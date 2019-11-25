@@ -24,8 +24,8 @@ trait ResponseTrait
         $response = $api->getService('response');
         $response
             ->setPayloadError($message)
-            ->setStatusCode($status)
-            ->send();
-        $api->stop();
+            ->setStatusCode($status);
+        
+        // $api->stop();
     }
 }
