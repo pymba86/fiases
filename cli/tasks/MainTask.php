@@ -36,10 +36,12 @@ class MainTask extends AbstractTask
             ->option('-p, --path <path>', 'Путь к файлам xml', null, 'extract')
             ->option('-f, --filter <filter>', 'Путь к отфильтрованным данным xml', null, 'filter')
             ->option('-n, --name <name>', 'Название файла', null, 'archive.rar')
+            ->option('-i, --iteration <iteration>', 'Количество итераций чтения в память', null, 10000)
             ->tap($console)
             ->command('main:custom', 'Загрузить базу из директории', false)
             ->option('-p, --path <path>', 'Путь к файлам xml')
             ->option('-f, --filter <filter>', 'Путь к отфильтрованным данным xml', null, 'filter')
+            ->option('-i, --iteration <iteration>', 'Количество итераций чтения в память', null, 10000)
             ->option('-b, --branch <branch>', 'Версия базы')
             ->option('-u, --url <url>', 'Url базы');
     }
@@ -67,7 +69,10 @@ class MainTask extends AbstractTask
 
         foreach ($mappers as $mapper) {
             $objectMapper = new $mapper();
-            $pipe->pipe(new FilterData($objectMapper, $dirSource, $dirFilter, 10000, $filters->toArray()));
+            
+            $pipe->pipe(new FilterData($objectMapper, $dirSource,
+                $dirFilter, $params['iteration'], $filters->toArray()));
+            
             $pipe->pipe(new CreateStructure($objectMapper));
             $pipe->pipe(new InsertData($objectMapper, $dirFilter));
             $pipe->pipe(new DeleteData($objectMapper, $dirFilter));
@@ -104,7 +109,10 @@ class MainTask extends AbstractTask
 
         foreach ($mappers as $mapper) {
             $objectMapper = new $mapper();
-            $pipe->pipe(new FilterData($objectMapper, $dirSource, $dirFilter, 1000000, $filters->toArray()));
+            
+            $pipe->pipe(new FilterData($objectMapper, $dirSource,
+                $dirFilter, $params['iteration'], $filters->toArray()));
+            
             $pipe->pipe(new CreateStructure($objectMapper));
             $pipe->pipe(new InsertData($objectMapper, $dirFilter));
             $pipe->pipe(new DeleteData($objectMapper, $dirFilter));
