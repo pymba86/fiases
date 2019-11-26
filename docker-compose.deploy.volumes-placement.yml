@@ -1,0 +1,16 @@
+version: '3.3'
+services:
+  app:
+    volumes:
+      - app-home-dir:/home/user:cached
+
+  elasticsearch:
+    volumes:
+      - app-es-data:/usr/share/elasticsearch/data:rw
+    deploy:
+      placement:
+        constraints:
+        - node.labels.${STACK_NAME}.app-es-data == true
+volumes:
+  app-es-data:
+  app-home-dir:

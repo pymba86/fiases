@@ -1,13 +1,13 @@
 version: '3.3'
 services:
-#  proxy:
-#    labels:
-#      - traefik.frontend.rule=Host:${DOMAIN}
-#      - traefik.enable=true
-#      - traefik.port=80
+  proxy:
+    labels:
+      - traefik.frontend.rule=Host:${DOMAIN}
+      - traefik.enable=true
+      - traefik.port=80
   app:
     labels:
-#      - traefik.frontend.rule=Host:${DOMAIN};PathPrefixStrip:${PATH_PREFIX}
-#      - traefik.enable=true
-#      - traefik.port=80
-#      - traefik.tags=${TRAEFIK_TAG}
+      - traefik.frontend.rule=Host:${DOMAIN};PathPrefixStrip:${PATH_PREFIX}
+      - traefik.enable=true
+      - traefik.port=80
+      - traefik.tags=${TRAEFIK_TAG}

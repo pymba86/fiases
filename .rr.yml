@@ -48,10 +48,10 @@ http:
     # worker pool configuration.
     pool:
       # number of workers to be serving.
-      numWorkers: 1
+      numWorkers: 4
 
       # maximum jobs per worker, 0 - unlimited.
-      maxJobs: 1
+      maxJobs: 24
 
       # for how long worker is allowed to be bootstrapped.
       allocateTimeout: 60
