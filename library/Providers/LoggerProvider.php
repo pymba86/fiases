@@ -39,7 +39,7 @@ class LoggerProvider implements ServiceProviderInterface
                         $handler = new StreamHandler($logFile, Logger::DEBUG);
                         break;
                     case 'syslog':
-                        $handler = new SyslogHandler($logName, Logger::DEBUG);
+                        $handler = new SyslogHandler($logName);
                         break;
                 }
                 
