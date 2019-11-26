@@ -4,6 +4,7 @@
 namespace Library\Task\Data;
 
 use Library\Filesystem\DirectoryInterface;
+use Library\Search\ConnectionInterface;
 
 /**
  * Задача для удаления данных, указанных в файле, из БД
@@ -17,7 +18,7 @@ class DeleteData extends AbstractDataTask
      */
     protected function getTaskDescription(): string
     {
-        return 'Удаление данных из' . $this->mapper->getSqlName();
+        return 'Удаление данных из' . $this->mapper->getIndexName();
     }
 
     /**
@@ -25,7 +26,7 @@ class DeleteData extends AbstractDataTask
      */
     protected function searchFileInDir(DirectoryInterface $dir)
     {
-        $files = $dir->findFilesByPattern($this->mapper->getInsertFileMask());
+        $files = $dir->findFilesByPattern($this->mapper->getDeleteFileMask());
         $file = reset($files);
         return $file;
     }
@@ -35,7 +36,9 @@ class DeleteData extends AbstractDataTask
      */
     protected function processItem(array $item)
     {
-        // FIXME Тут что-то должно быть
+        /** @var ConnectionInterface $search */
+        $search = $this->di->get("search");
+        $search->delete($this->mapper, $item);
     }
 
 }

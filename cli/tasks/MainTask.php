@@ -3,6 +3,7 @@
 namespace Library\Cli\Task;
 
 use Library\Cli\Console;
+use Library\Task\Data\DeleteData;
 use function Library\Core\appPath;
 use Library\Filesystem\DirectoryInterface;
 use Library\Informer\InformerResult;
@@ -69,6 +70,7 @@ class MainTask extends AbstractTask
             $pipe->pipe(new FilterData($objectMapper, $dirSource, $dirFilter, 10000, $filters->toArray()));
             $pipe->pipe(new CreateStructure($objectMapper));
             $pipe->pipe(new InsertData($objectMapper, $dirFilter));
+            $pipe->pipe(new DeleteData($objectMapper, $dirFilter));
         }
 
         $pipe->pipe(new UpdateVersion($informerResult));
@@ -98,17 +100,18 @@ class MainTask extends AbstractTask
         $dirFilter = $fs->createChildDirectory($params['filter']);
         $dirSource = $fs->createChildDirectory($params['path']);
 
-       // $pipe->pipe(new CurrentVersion($informerResult));
+        $pipe->pipe(new CurrentVersion($informerResult));
 
         foreach ($mappers as $mapper) {
             $objectMapper = new $mapper();
             $pipe->pipe(new FilterData($objectMapper, $dirSource, $dirFilter, 1000000, $filters->toArray()));
-          //  $pipe->pipe(new CreateStructure($objectMapper));
-          //  $pipe->pipe(new InsertData($objectMapper, $dirFilter));
+            $pipe->pipe(new CreateStructure($objectMapper));
+            $pipe->pipe(new InsertData($objectMapper, $dirFilter));
+            $pipe->pipe(new DeleteData($objectMapper, $dirFilter));
         }
 
-       // $pipe->pipe(new UpdateVersion($informerResult));
-       // $pipe->setCleanup(new Cleanup([$dirFilter]));
+        $pipe->pipe(new UpdateVersion($informerResult));
+        $pipe->setCleanup(new Cleanup([$dirFilter]));
         $pipe->run($state);
     }
 }
