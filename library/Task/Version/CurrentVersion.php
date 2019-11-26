@@ -34,7 +34,7 @@ class CurrentVersion extends AbstractTask
      */
     public function run(StateInterface $state): void
     {
-        $this->info("Удаленная версия определена: " . $this->informerResult->getVersion());
+        $this->info("Версия определена: " . $this->informerResult->getVersion());
         $this->info("Получение установленной версии");
 
         /** @var ConnectionInterface $search */

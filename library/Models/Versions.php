@@ -15,7 +15,8 @@ class Versions extends AbstractMapper
      */
     protected $fields = [
         'version' => 'string',
-        'data' => 'string',
+        'date' => 'string',
+        'url' => 'string',
     ];
 
     /**

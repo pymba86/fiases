@@ -39,7 +39,12 @@ class UpdateVersion extends AbstractTask
         /** @var ConnectionInterface $search */
         $search = $this->di->getShared('search');
 
-        $search->save(new Versions(), ['version' => strval($this->informerResult->getVersion()), 'data' => time()]);
+        $search->save(new Versions(), [
+                'version' => strval($this->informerResult->getVersion()),
+                'url' => $this->informerResult->getUrl(),
+                'data' => time()
+            ]
+        );
 
         $this->info("Сохранение прошло успешно");
     }

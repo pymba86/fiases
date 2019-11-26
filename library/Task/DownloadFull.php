@@ -44,7 +44,7 @@ class DownloadFull extends AbstractTask
     public function run(StateInterface $state): void
     {
         $informerResult = $this->fetchInfoFromService();
-
+        
         if ($informerResult->hasResult()) {
             $this->informerResult = $informerResult;
             $this->downloadFile($informerResult->getUrl());

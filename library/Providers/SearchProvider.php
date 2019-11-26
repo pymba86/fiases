@@ -25,9 +25,12 @@ class SearchProvider implements ServiceProviderInterface
 
                 $batchLimit = envValue('ES_BATCH_LIMIT', 10000);
 
-                $clientBuilder = ClientBuilder::create();
-                $clientBuilder->setHosts([$clientHost]);
-                $client = $clientBuilder->build();
+                $futureHandler = ClientBuilder::multiHandler();
+                
+                $client = ClientBuilder::create()
+                    ->setHandler($futureHandler)
+                    ->setHosts([$clientHost])
+                    ->build();
 
                 $connection = new Connection($client, $batchLimit);
 

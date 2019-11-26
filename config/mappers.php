@@ -21,21 +21,23 @@ use Library\Models\Rooms;
  * Список мапперов, которые будут применены к архиву ФИАС
  * В случае если один из них не понадобиться, нужно закоментировать - он будет пропушен
  */
+
+// TODO Настройка мапперов через переменные окружения
 return [
-    FlatTypes::class,
-    HouseStateStatuses::class,
-    IntervalStatuses::class,
-    NormativeDocumentTypes::class,
-    OperationStatuses::class,
-    RoomTypes::class,
-    StructureStatuses::class,
     AddressObjects::class,
-    Steads::class,
-    Rooms::class,
     Houses::class,
-    ActualStatuses::class,
-    CenterStatuses::class,
-    CurrentStatuses::class,
-    EstateStatuses::class,
-    AddressObjectTypes::class
+//    FlatTypes::class,
+//    HouseStateStatuses::class,
+//    IntervalStatuses::class,
+//    NormativeDocumentTypes::class,
+//    OperationStatuses::class,
+//    RoomTypes::class,
+//    StructureStatuses::class,
+//    Steads::class,
+//    Rooms::class,
+//    ActualStatuses::class,
+//    CenterStatuses::class,
+//    CurrentStatuses::class,
+//    EstateStatuses::class,
+//    AddressObjectTypes::class
 ];

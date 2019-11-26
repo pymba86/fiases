@@ -154,9 +154,7 @@ class FilterData extends AbstractTask
             $reader->closeFile();
 
         } else {
-            throw new RuntimeException(
-                "Can't open xml file " . $file->getPath() . ' for writing'
-            );
+            $this->info("Чтение файла {$file->getPath()} завершилось ошибкой");
         }
 
     }
@@ -233,6 +231,7 @@ class FilterData extends AbstractTask
     {
         $file = $this->filterDir->createChildFile("{$file->getFilename()}.XML");
         file_put_contents($file->getPath(), null);
+        chmod($file->getPath(), 0777);
         return $file;
     }
 }

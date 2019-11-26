@@ -33,6 +33,7 @@ class Informer implements InformerInterface {
     /**
      * Получить клиента для удаленного запроса
      * @return SoapClient
+     * @throws \SoapFault
      */
     public function client(): SoapClient {
 

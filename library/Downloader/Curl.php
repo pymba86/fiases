@@ -61,6 +61,7 @@ class Curl implements DownloaderInterface {
                 "Can't open local file for writing: " . $localFile->getPath()
             );
         }
+        chmod($localFile->getPath(), 0777);
         return $hLocal;
     }
 }

@@ -252,7 +252,7 @@ class Connection implements ConnectionInterface
                 'settings' => [
                     'analysis' => [
                         'analyzer' => [
-                            'address' => [
+                            'custom' => [
                                 'type' => 'custom',
                                 'tokenizer' => 'whitespace',
                                 'trim' => ['trim', 'lowercase']
@@ -280,7 +280,7 @@ class Connection implements ConnectionInterface
                 $params['body']['mappings'][$type]['properties'][$column] = ['type' => $typeColumn];
 
                 if ($typeColumn == 'text') {
-                    $params['body']['mappings'][$type]['properties'][$column]['analyzer'] = 'address';
+                    $params['body']['mappings'][$type]['properties'][$column]['analyzer'] = 'custom';
                 }
             }
         }
@@ -340,10 +340,10 @@ class Connection implements ConnectionInterface
 
             if ($field instanceof Line) {
                 $typeFields[$name] = 'text';
-            }
-
-            if ($field instanceof IntNumber) {
+            } else if ($field instanceof IntNumber) {
                 $typeFields[$name] = 'long';
+            } else {
+                $typeFields[$name] = 'text';
             }
 
         }

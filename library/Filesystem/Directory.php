@@ -4,8 +4,11 @@ namespace Library\Filesystem;
 
 use CallbackFilterIterator;
 use DirectoryIterator;
+use FilesystemIterator;
 use InvalidArgumentException;
 use Iterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use RuntimeException;
 
 /**
@@ -79,11 +82,7 @@ class Directory implements DirectoryInterface
     protected function getIterator(): Iterator
     {
         if ($this->iterator === null) {
-            $dirIterator = new DirectoryIterator($this->getPath());
-            $filter = function (string $current, string $key, DirectoryIterator $iterator): bool {
-                return !$iterator->isDot();
-            };
-            $this->iterator = new CallbackFilterIterator($dirIterator, $filter);
+            $this->iterator = new DirectoryIterator($this->getPath());
         }
 
         return $this->iterator;
@@ -158,9 +157,16 @@ class Directory implements DirectoryInterface
      */
     public function delete(): DirectoryInterface
     {
-        foreach ($this as $child) {
-            $child->delete();
+        $di = new RecursiveDirectoryIterator($this->getPath(),
+            FilesystemIterator::SKIP_DOTS);
+
+        $ri = new RecursiveIteratorIterator($di,
+            RecursiveIteratorIterator::CHILD_FIRST);
+
+        foreach ($ri as $file) {
+            $file->isDir() ? rmdir($file) : unlink($file);
         }
+
         if (!@rmdir($this->getPath())) {
             throw new RuntimeException(
                 "Can't delete directory: " . $this->getPath()
@@ -179,6 +185,7 @@ class Directory implements DirectoryInterface
                 "Can't create directory " . $this->getPath()
             );
         }
+        chmod($this->getPath(), 0777);
         return $this;
     }
 

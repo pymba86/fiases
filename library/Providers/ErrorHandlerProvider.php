@@ -19,8 +19,6 @@ class ErrorHandlerProvider implements ServiceProviderInterface
         /** @var Config $config */
         $config = $container->getShared('config');
 
-        ini_set('display_errors', 'Off');
-
         $handler = new ErrorHandler($logger, $config);
         set_error_handler([$handler, 'handle']);
         register_shutdown_function([$handler, 'shutdown']);

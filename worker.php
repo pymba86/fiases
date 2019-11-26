@@ -41,8 +41,6 @@ while ($req = $psr7->acceptRequest()) {
             $_REQUEST[$key] = $value;
         }
 
-        $psr17Factory = new \Nyholm\Psr7\Factory\Psr17Factory();
-
         $bootstrap->getApplication()->handle();
 
         $appResponse = $bootstrap->getResponse();

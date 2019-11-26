@@ -39,7 +39,8 @@ class MainTask extends AbstractTask
             ->command('main:custom', 'Загрузить базу из директории', false)
             ->option('-p, --path <path>', 'Путь к файлам xml')
             ->option('-f, --filter <filter>', 'Путь к отфильтрованным данным xml', null, 'filter')
-            ->option('-i, --informer <informer>', 'Версия базы');
+            ->option('-b, --branch <branch>', 'Версия базы')
+            ->option('-u, --url <url>', 'Url базы');
     }
 
     public function loadAction(array $params)
@@ -61,17 +62,17 @@ class MainTask extends AbstractTask
 
         $pipe->pipe(new DownloadFull($fileArchive, $informerResult));
         $pipe->pipe(new CurrentVersion($informerResult));
-        $pipe->pipe(new Unpack($params['name'],$dirSource));
+        $pipe->pipe(new Unpack($fileArchive, $dirSource));
 
         foreach ($mappers as $mapper) {
-             $objectMapper = new $mapper();
-             $pipe->pipe(new FilterData($objectMapper, $dirSource, $dirFilter, 10000, $filters->toArray()));
-             $pipe->pipe(new CreateStructure($objectMapper));
-             $pipe->pipe(new InsertData($objectMapper, $dirFilter));
+            $objectMapper = new $mapper();
+            $pipe->pipe(new FilterData($objectMapper, $dirSource, $dirFilter, 10000, $filters->toArray()));
+            $pipe->pipe(new CreateStructure($objectMapper));
+            $pipe->pipe(new InsertData($objectMapper, $dirFilter));
         }
 
         $pipe->pipe(new UpdateVersion($informerResult));
-        $pipe->setCleanup(new Cleanup([$dirFilter]));
+        $pipe->setCleanup(new Cleanup([$dirFilter, $dirSource, $fileArchive]));
         $pipe->run($state);
 
     }
@@ -83,7 +84,8 @@ class MainTask extends AbstractTask
         $state = new ArrayState();
 
         $informerResult = new InformerResult();
-        $informerResult->setVersion(intval($params['informer']));
+        $informerResult->setVersion(intval($params['branch']));
+        $informerResult->setUrl($params['url']);
 
         /** @var DirectoryInterface $fs */
         $fs = $this->di->get("fs");
@@ -96,17 +98,17 @@ class MainTask extends AbstractTask
         $dirFilter = $fs->createChildDirectory($params['filter']);
         $dirSource = $fs->createChildDirectory($params['path']);
 
-        $pipe->pipe(new CurrentVersion($informerResult));
+       // $pipe->pipe(new CurrentVersion($informerResult));
 
         foreach ($mappers as $mapper) {
-             $objectMapper = new $mapper();
-             $pipe->pipe(new FilterData($objectMapper, $dirSource, $dirFilter, 10000, $filters->toArray()));
-             $pipe->pipe(new CreateStructure($objectMapper));
-             $pipe->pipe(new InsertData($objectMapper, $dirFilter));
+            $objectMapper = new $mapper();
+            $pipe->pipe(new FilterData($objectMapper, $dirSource, $dirFilter, 1000000, $filters->toArray()));
+          //  $pipe->pipe(new CreateStructure($objectMapper));
+          //  $pipe->pipe(new InsertData($objectMapper, $dirFilter));
         }
 
-        $pipe->pipe(new UpdateVersion($informerResult));
-        $pipe->setCleanup(new Cleanup([$dirFilter]));
+       // $pipe->pipe(new UpdateVersion($informerResult));
+       // $pipe->setCleanup(new Cleanup([$dirFilter]));
         $pipe->run($state);
     }
 }
